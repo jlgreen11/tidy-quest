@@ -1,4 +1,4 @@
-# Chore Quest — Product & Technical Plan (v0.1)
+# TidyQuest — Product & Technical Plan (v0.1)
 
 A family chore-gamification app for iPhone and iPad with a shared backend. This is v0.1, revised after a full /autoplan pass (CEO + Design + Eng reviews with dual-voice critique). v0 lives at `PLAN.md` for comparison; the review and decisions are in `REVIEW.md` and `DECISIONS.md`.
 
@@ -440,7 +440,7 @@ Recommendation: upgrade to Supabase Pro ($25/mo) at ~30 families. Total cost at 
 
 **State management:** Observable (iOS 17+) with a thin repository layer. TCA explicitly declined for solo-builder velocity.
 
-**Shared package:** `ChoreQuestCore` Swift package consumed by iPhone, iPad, Watch (post-v1), widget targets.
+**Shared package:** `TidyQuestCore` Swift package consumed by iPhone, iPad, Watch (post-v1), widget targets.
 
 **Local storage: SwiftData** (not Core Data). Taste decision TD3. Rationale: iOS 17+ target, matches Observable, simpler migration for greenfield. Core Data kept in reserve if SwiftData migrations become a blocker.
 
@@ -574,7 +574,7 @@ Most of v0's open questions are decided in DECISIONS.md. Still open:
 - **Apple Developer account.** User confirmation needed. ($99/year.)
 - **Under-13 policy scope.** If any kid is over 13 and wants own Apple ID, data model needs a teen-mode variant. Defer.
 - **ADHD pivot.** Left open. v0.1 metrics (D30 retention, parent satisfaction) may signal a pivot to clinical positioning. Reassess after 3 months of TestFlight data.
-- **Name.** "Chore Quest" is still a placeholder. Decide before App Store submission.
+- **Name.** "TidyQuest" is still a placeholder. Decide before App Store submission.
 
 ---
 
@@ -628,7 +628,7 @@ $5.99/month OR $39.99/year (save 44%). 14-day free trial on first family creatio
 
 v0 had no test plan. v0.1 requires a working test suite before TestFlight to any non-self user.
 
-**iOS unit tests (Swift Testing 6+).** `ChoreQuestCore` package targets ≥70% coverage. Economy logic (balance computation, streak computation, on-miss policy application) at 100% coverage.
+**iOS unit tests (Swift Testing 6+).** `TidyQuestCore` package targets ≥70% coverage. Economy logic (balance computation, streak computation, on-miss policy application) at 100% coverage.
 
 **Property-based tests (Swift Testing + fuzz).** Economy invariants:
 - `balance(user) == sum(transactions for user)` always
@@ -660,9 +660,9 @@ v0 had no test plan. v0.1 requires a working test suite before TestFlight to any
 
 **Environments:**
 
-- `chore-quest-local` (CLI, ephemeral dev).
-- `chore-quest-staging` (persistent Supabase project; friend-family TestFlight connects here).
-- `chore-quest-prod` (persistent Supabase project; App Store builds connect here).
+- `tidy-quest-local` (CLI, ephemeral dev).
+- `tidy-quest-staging` (persistent Supabase project; friend-family TestFlight connects here).
+- `tidy-quest-prod` (persistent Supabase project; App Store builds connect here).
 - iOS build scheme selects the backend via `Info.plist` build configuration.
 
 **Migrations:** Supabase CLI versioned SQL. Every PR that touches schema includes a migration. CI refuses merges that fail lint. Production migrations manually approved and applied via `supabase db push --linked`.

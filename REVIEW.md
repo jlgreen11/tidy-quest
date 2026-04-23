@@ -1,4 +1,4 @@
-# Chore Quest — /autoplan Review Report
+# TidyQuest — /autoplan Review Report
 
 **Reviewed:** 2026-04-22 | **Plan file:** PLAN.md | **Branch:** autoplan-v0
 **Methodology:** /autoplan (CEO → Design → Eng) with dual voices (Claude primary + Claude independent subagent; Codex unavailable → tagged `[subagent-only]`)
@@ -375,7 +375,7 @@ Plus 11 medium/high items (rate limiting, photo URL pattern/TTL, offline status 
 │  │   (SwiftUI)  │ │   (SwiftUI)  │ │       (SwiftUI)             │   │
 │  └──────┬───────┘ └──────┬───────┘ └─────────────┬──────────────┘   │
 │         │                 │                       │                    │
-│         └────────── ChoreQuestCore (Swift Pkg) ───┘                    │
+│         └────────── TidyQuestCore (Swift Pkg) ───┘                    │
 │                     │                                                   │
 │                     ├─ Repository layer (Observable)                    │
 │                     ├─ SwiftData local cache                            │
@@ -417,7 +417,7 @@ Full test plan written to `TEST_PLAN.md` in this repo (see Phase 4 deliverables)
 
 | Layer | Tool | Coverage target |
 |---|---|---|
-| iOS unit | Swift Testing | 70% of ChoreQuestCore |
+| iOS unit | Swift Testing | 70% of TidyQuestCore |
 | iOS UI snapshot | swift-snapshot-testing | All 3 tiers × key screens |
 | Property-based | Swift Testing + fuzz | Ledger invariants |
 | Edge function | Deno test | Each edge function, happy + error paths |

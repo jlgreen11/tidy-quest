@@ -1,4 +1,4 @@
-# Chore Quest — Test Plan
+# TidyQuest — Test Plan
 
 Produced by /autoplan Phase 3 (Eng Review). This is the minimum test matrix required before any non-self TestFlight user. See `PLAN_v0.1.md` §16 for rationale.
 
@@ -8,7 +8,7 @@ Produced by /autoplan Phase 3 (Eng Review). This is the minimum test matrix requ
 
 | Layer | Tool | Target | Gate |
 |---|---|---|---|
-| iOS unit | Swift Testing 6+ | 70% of ChoreQuestCore; 100% of economy logic | PR merge |
+| iOS unit | Swift Testing 6+ | 70% of TidyQuestCore; 100% of economy logic | PR merge |
 | UI snapshot | swift-snapshot-testing | 3 tiers × 4 states on every kid screen; parent critical flows | PR merge |
 | Property-based | Swift Testing + fuzz | Every ledger invariant (below) | PR merge |
 | Edge function | Deno test | Every endpoint, 5 cases each (below) | PR merge |

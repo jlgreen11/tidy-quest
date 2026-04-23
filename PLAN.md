@@ -1,4 +1,4 @@
-# Chore Quest — Product & Technical Plan (v0)
+# TidyQuest — Product & Technical Plan (v0)
 
 A working planning document for a family chore-gamification app on iPhone and iPad with a shared backend. Written as if a senior PM and a staff engineer sat down together for an afternoon and wrote down what they believe. Some of this is opinion; the last section lists decisions that still need input.
 
@@ -353,7 +353,7 @@ For a family of 4, realistic steady-state:
 
 **State management: Observable (iOS 17+) with a thin repository layer.** TCA is powerful but adds learning overhead for a solo builder; vanilla Observable with a well-structured model layer is plenty. If the app grows, revisit.
 
-**Shared Swift package across iPhone, iPad, and Watch targets.** Domain types, API client, local persistence live in a `ChoreQuestCore` package that all three targets consume.
+**Shared Swift package across iPhone, iPad, and Watch targets.** Domain types, API client, local persistence live in a `TidyQuestCore` package that all three targets consume.
 
 **Offline support.** Core Data or SwiftData as a local cache. Kids will mark chores done in the car, on a plane, in a bad-wifi basement. Writes queue locally and sync when connectivity returns. Conflict resolution is mostly trivial because of the append-only ledger (a duplicate completion is idempotent by ChoreInstance id; a late-arriving write doesn't overwrite anything).
 
@@ -485,7 +485,7 @@ These are things I made assumptions about or deferred. Pulling them out explicit
 - **Behavior fines.** Are you committed to wanting deductions, and how squeamish are you about the punitive framing? If strongly committed, the "missed chore = no gain" default may feel too soft; if uncertain, start soft and add strictness later.
 - **Siblings' visibility into each other's ledgers.** Default is off. Confirm?
 - **Under-13 policy scope.** If any kid is over 13, you may want to give them a teen-mode account with their own Apple ID. Worth deciding in advance because the data model splits slightly.
-- **Name.** "Chore Quest" is a placeholder. Naming affects icon, marketing, App Store metadata. Worth picking something you like before the TestFlight invites start going out.
+- **Name.** "TidyQuest" is a placeholder. Naming affects icon, marketing, App Store metadata. Worth picking something you like before the TestFlight invites start going out.
 
 None of these are blocking for starting the design work, but several of them shape the MVP cut, and it's cheaper to decide now than to rework later.
 

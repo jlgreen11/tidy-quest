@@ -1,4 +1,4 @@
-# Chore Quest — Decision Log (/autoplan v0.1)
+# TidyQuest — Decision Log (/autoplan v0.1)
 
 **Date:** 2026-04-22 | **Branch:** autoplan-v0 | **Plan v0 commit:** d34c0b4
 
