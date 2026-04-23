@@ -29,10 +29,20 @@ struct TidyQuestKidApp: App {
         let client = SupabaseAPIClient()
         #endif
 
+        let keychain = KeychainStore(service: "com.jlgreen11.tidyquest.kid")
+
+        #if DEBUG
+        // Auto-pair to Kai (Chen-Rodriguez family, Standard tier) so the simulator
+        // skips PairDeviceView and lands directly on HomeView with real mock data.
+        // MockAPIClient.claimPairing always returns Kai for any code, so storing any
+        // non-empty token here causes restoreSession() to succeed immediately.
+        try? keychain.set("debug-mock-device-token-kai", forKey: KeychainStore.Keys.deviceToken)
+        #endif
+
         self.apiClient = client
         self.authController = AuthController(
             apiClient: client,
-            keychain: KeychainStore(service: "com.jlgreen11.tidyquest.kid")
+            keychain: keychain
         )
         self.choreRepository = ChoreRepository(apiClient: client)
         self.ledgerRepository = LedgerRepository(apiClient: client)
