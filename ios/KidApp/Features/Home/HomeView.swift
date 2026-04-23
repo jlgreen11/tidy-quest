@@ -283,12 +283,20 @@ struct HomeView: View {
 
     // MARK: - All done view
 
+    @ViewBuilder private var allDoneIcon: some View {
+        let base = Image(systemName: "checkmark.seal.fill")
+            .font(.system(size: tier == .starter ? 72 : 52))
+            .foregroundStyle(.green)
+        if #available(iOS 18.0, *) {
+            base.symbolEffect(.bounce)
+        } else {
+            base
+        }
+    }
+
     private var allDoneView: some View {
         VStack(spacing: 12) {
-            Image(systemName: "checkmark.seal.fill")
-                .font(.system(size: tier == .starter ? 72 : 52))
-                .foregroundStyle(.green)
-                .symbolEffect(.bounce)
+            allDoneIcon
 
             Text("All done today!")
                 .font(tier.headlineFont)

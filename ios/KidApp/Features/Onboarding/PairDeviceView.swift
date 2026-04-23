@@ -19,18 +19,26 @@ struct PairDeviceView: View {
 
     // MARK: - Body
 
+    @ViewBuilder private var heroIcon: some View {
+        let base = Image(systemName: "star.circle.fill")
+            .font(.system(size: 72))
+            .foregroundStyle(
+                LinearGradient(colors: [.purple, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
+            )
+        if #available(iOS 18.0, *) {
+            base.symbolEffect(.bounce, options: .repeating.speed(0.5))
+        } else {
+            base
+        }
+    }
+
     var body: some View {
         VStack(spacing: 32) {
             Spacer()
 
             // Logo / hero
             VStack(spacing: 12) {
-                Image(systemName: "star.circle.fill")
-                    .font(.system(size: 72))
-                    .foregroundStyle(
-                        LinearGradient(colors: [.purple, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
-                    )
-                    .symbolEffect(.bounce, options: .repeating.speed(0.5))
+                heroIcon
 
                 Text("TidyQuest")
                     .font(.system(size: 34, weight: .bold, design: .rounded))

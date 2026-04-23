@@ -142,6 +142,17 @@ struct ChoreTile: View {
 
     // MARK: - Completed face
 
+    @ViewBuilder private var completedCheckmark: some View {
+        let base = Image(systemName: "checkmark.circle.fill")
+            .font(.system(size: tier == .starter ? 48 : 36))
+            .foregroundStyle(.green)
+        if #available(iOS 18.0, *) {
+            base.symbolEffect(.bounce, options: .speed(1.2))
+        } else {
+            base
+        }
+    }
+
     private var completedFace: some View {
         ZStack {
             RoundedRectangle(cornerRadius: tier.tileCornerRadius)
@@ -151,10 +162,7 @@ struct ChoreTile: View {
                         .stroke(Color.green.opacity(0.5), lineWidth: 2)
                 }
 
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: tier == .starter ? 48 : 36))
-                .foregroundStyle(.green)
-                .symbolEffect(.bounce, options: .speed(1.2))
+            completedCheckmark
         }
         .frame(maxWidth: .infinity)
         .frame(minHeight: minSize)
