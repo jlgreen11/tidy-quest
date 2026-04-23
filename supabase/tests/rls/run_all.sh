@@ -3,7 +3,7 @@
 # TidyQuest RLS Test Runner
 # supabase/tests/rls/run_all.sh
 #
-# Runs every RLS test file via `supabase db psql`.
+# Runs every RLS test file via `psql` against the local Supabase stack.
 # Exits non-zero on any failure.
 #
 # Usage:
@@ -11,9 +11,11 @@
 #   bash supabase/tests/rls/run_all.sh --ci      # CI mode: quieter output
 #
 # Requirements:
-#   - supabase CLI installed and in PATH
-#   - `supabase start` already running (local dev)
+#   - psql in PATH (ships with postgresql-client on ubuntu; brew install libpq on mac)
+#   - `supabase start` already running (local dev) — exposes db on 127.0.0.1:54322
 #   - Seed data loaded (supabase db reset applies seed.sql automatically)
+#
+# Override DB URL with DATABASE_URL env var if needed.
 # =============================================================================
 
 set -euo pipefail
@@ -23,6 +25,9 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
+# Supabase local defaults (supabase/config.toml db.port = 54322 by default;
+# user postgres, password postgres, database postgres).
+DB_URL="${DATABASE_URL:-postgresql://postgres:postgres@127.0.0.1:54322/postgres}"
 CI_MODE=false
 
 for arg in "$@"; do
@@ -45,18 +50,19 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Verify supabase CLI is available
+# Verify psql is available
 # ---------------------------------------------------------------------------
-if ! command -v supabase &>/dev/null; then
-  echo "${RED}ERROR: supabase CLI not found. Install via: brew install supabase/tap/supabase${RESET}"
+if ! command -v psql &>/dev/null; then
+  echo "${RED}ERROR: psql not found. Install postgresql-client (apt) or libpq (brew).${RESET}"
   exit 1
 fi
 
 # ---------------------------------------------------------------------------
-# Verify local Supabase stack is running
+# Verify local Supabase db is reachable
 # ---------------------------------------------------------------------------
-if ! supabase status &>/dev/null 2>&1; then
-  echo "${YELLOW}WARNING: supabase stack may not be running. Run: supabase start${RESET}"
+if ! psql "${DB_URL}" -c "SELECT 1" &>/dev/null; then
+  echo "${YELLOW}WARNING: cannot connect to ${DB_URL}${RESET}"
+  echo "${YELLOW}Ensure 'supabase start' is running, or override DATABASE_URL.${RESET}"
   echo "${YELLOW}Attempting to run tests anyway...${RESET}"
 fi
 
@@ -98,13 +104,11 @@ for test_file in "${TEST_FILES[@]}"; do
 
   printf "Running %-45s " "${test_name}..."
 
-  # Run the test file. Capture stderr; let stdout through in non-CI mode.
+  # Run the test file via psql. ON_ERROR_STOP=1 makes any SQL error fail the run.
   tmp_err="$(mktemp)"
   if [[ "${CI_MODE}" == "true" ]]; then
     tmp_out="$(mktemp)"
-    if supabase db psql \
-         --project-dir "${PROJECT_ROOT}" \
-         -f "${test_file}" \
+    if psql "${DB_URL}" -v ON_ERROR_STOP=1 -f "${test_file}" \
          >"${tmp_out}" 2>"${tmp_err}"; then
       echo "${GREEN}PASS${RESET}"
       ((PASS++)) || true
@@ -120,9 +124,7 @@ for test_file in "${TEST_FILES[@]}"; do
       rm -f "${tmp_out}" "${tmp_err}"
     fi
   else
-    if supabase db psql \
-         --project-dir "${PROJECT_ROOT}" \
-         -f "${test_file}" \
+    if psql "${DB_URL}" -v ON_ERROR_STOP=1 -f "${test_file}" \
          2>"${tmp_err}"; then
       echo "${GREEN}PASS${RESET}"
       ((PASS++)) || true

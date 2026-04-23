@@ -211,8 +211,7 @@ SELECT tests.expect_rows(
 );
 SELECT tests.end_test('chore_instance: parent A cannot UPDATE family B instance');
 
--- Cleanup
-SET ROLE postgres;
-DELETE FROM family WHERE id = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
-
+-- Cleanup — outer ROLLBACK discards everything inserted in this file,
+-- so no explicit DELETE is needed (and DELETE FROM family would fail on
+-- FK constraints from chore_instance anyway).
 ROLLBACK;

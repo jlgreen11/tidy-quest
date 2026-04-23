@@ -88,3 +88,62 @@ jobs:
             --ignore=user-revoke-device \
             .
         working-directory: supabase/functions
+
+  # ── Supabase: RLS policy tests ───────────────────────────────────────────
+  rls-tests:
+    name: Supabase — RLS policy tests
+    # ubuntu-latest ships Docker by default; macos-15 runners do not, so the
+    # Supabase CLI (which uses docker-compose) requires Linux here.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start Supabase local stack
+        # `supabase start` pulls Docker images on first run, applies migrations,
+        # and loads supabase/seed.sql. Migration 20260422000004_rls_policies.sql
+        # references auth.jwt(), which is created by the auth (gotrue) service —
+        # so the full stack must come up, not just the db container.
+        run: supabase start
+
+      - name: Verify stack health
+        run: supabase status
+
+      # NOTE: `supabase start` on a fresh CI runner already applies every
+      # migration and runs supabase/seed.sql — `supabase db reset` would be
+      # redundant here and has been observed to 502 during its internal
+      # container-restart phase on GitHub-hosted runners (flake), so we skip it.
+
+      - name: Ensure psql is installed
+        # run_all.sh shells out to psql against 127.0.0.1:54322. Ubuntu
+        # runners usually include postgresql-client; pin the install for
+        # determinism.
+        run: |
+          if ! command -v psql >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y postgresql-client
+          fi
+          psql --version
+
+      - name: Run RLS test suite
+        run: bash supabase/tests/rls/run_all.sh --ci
+
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          echo "=== docker ps ==="
+          docker ps || true
+          echo ""
+          echo "=== supabase_db_tidy-quest logs (last 100) ==="
+          docker logs --tail 100 supabase_db_tidy-quest || true
+          echo ""
+          echo "=== supabase_auth_tidy-quest logs (last 50) ==="
+          docker logs --tail 50 supabase_auth_tidy-quest || true
+
+      - name: Stop Supabase local stack
+        if: always()
+        run: supabase stop --no-backup || true

@@ -32,21 +32,22 @@ VALUES ('b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b221',
 ON CONFLICT (id) DO NOTHING;
 
 -- Family A audit entries (inserted by service_role during edge fn execution)
+-- Note: `target` is a single text column per schema (e.g. 'point_transaction:<uuid>').
 INSERT INTO audit_log (id, family_id, actor_user_id, action, target, payload, created_at)
 VALUES
   ('e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e101',
    '11111111-1111-1111-1111-111111111111',
    '22222222-2222-2222-2222-222222222221',
-   'point_transaction.fine', 'point_transaction',
-   '77777777-7777-7777-7777-777777777701',
+   'point_transaction.large',
+   'point_transaction:77777777-7777-7777-7777-777777777701',
    '{"amount": -5, "reason": "Rude to sibling"}',
    now() - interval '2 days'),
 
   ('e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e102',
    '11111111-1111-1111-1111-111111111111',
    '22222222-2222-2222-2222-222222222221',
-   'redemption.approve', 'redemption_request',
-   gen_random_uuid(),
+   'redemption.approve',
+   format('redemption_request:%s', gen_random_uuid()),
    '{"reward": "30 min tablet time"}',
    now() - interval '1 day'),
 
@@ -54,8 +55,8 @@ VALUES
   ('e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e103',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
    'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b221',
-   'point_transaction.fine', 'point_transaction',
-   gen_random_uuid(),
+   'point_transaction.large',
+   format('point_transaction:%s', gen_random_uuid()),
    '{"amount": -10}',
    now())
 ON CONFLICT (id) DO NOTHING;
@@ -151,12 +152,14 @@ SELECT tests.set_as_parent(
   '22222222-2222-2222-2222-222222222221'::uuid,
   '11111111-1111-1111-1111-111111111111'::uuid
 );
--- No UPDATE policy → silent denial (0 rows updated)
-UPDATE audit_log SET action = 'tampered'
+-- No UPDATE policy → silent denial (0 rows updated). Use a valid enum
+-- value for 'action' — the point of the test is that RLS prevents the
+-- update from sticking, not to test enum validation.
+UPDATE audit_log SET action = 'family.delete'
 WHERE id = 'e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e101';
 SET ROLE postgres;
 SELECT tests.expect_rows(
-  'SELECT * FROM audit_log WHERE id = ''e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e101'' AND action = ''tampered''',
+  'SELECT * FROM audit_log WHERE id = ''e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e101'' AND action = ''family.delete''',
   0
 );
 SELECT tests.end_test('audit_log: parent cannot UPDATE audit_log');
@@ -182,20 +185,23 @@ SELECT tests.end_test('audit_log: parent cannot DELETE audit_log');
 -- ============================================================================
 SELECT tests.begin_test('audit_log: service_role can INSERT audit_log');
 SET ROLE postgres;
+-- audit_log has 6 writable columns in this INSERT (id, family_id,
+-- actor_user_id, action, target, payload). Compose target as a single text
+-- value and use a real enum member for `action`.
 INSERT INTO audit_log (id, family_id, actor_user_id, action, target, payload)
 VALUES ('e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e199',
         '11111111-1111-1111-1111-111111111111',
         '22222222-2222-2222-2222-222222222221',
-        'test_edge_fn_action', 'point_transaction',
-        gen_random_uuid(), '{}');
+        'family.create',
+        format('point_transaction:%s', gen_random_uuid()),
+        '{}');
 SELECT tests.expect_rows(
   'SELECT * FROM audit_log WHERE id = ''e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e199''',
   1
 );
 SELECT tests.end_test('audit_log: service_role can INSERT audit_log');
 
--- Cleanup
-SET ROLE postgres;
-DELETE FROM family WHERE id = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
-
+-- Cleanup — outer ROLLBACK discards everything inserted in this file,
+-- so no explicit DELETE is needed (and DELETE FROM family would fail on
+-- FK constraints from audit_log anyway).
 ROLLBACK;

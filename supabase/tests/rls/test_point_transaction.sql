@@ -225,8 +225,7 @@ SELECT tests.expect_rows(
 );
 SELECT tests.end_test('point_transaction: parent cannot DELETE (RLS denies)');
 
--- Cleanup
-SET ROLE postgres;
-DELETE FROM family WHERE id = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
-
+-- Cleanup — outer ROLLBACK discards everything inserted in this file,
+-- so no explicit DELETE is needed (and DELETE FROM family would fail on
+-- FK constraints from point_transaction anyway).
 ROLLBACK;

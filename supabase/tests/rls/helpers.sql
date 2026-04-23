@@ -10,6 +10,9 @@
 
 CREATE EXTENSION IF NOT EXISTS pgtap;
 
+-- Test helpers live in their own schema to keep them out of public.
+CREATE SCHEMA IF NOT EXISTS tests;
+
 -- ---------------------------------------------------------------------------
 -- set_as_parent(user_id, family_id)
 --
@@ -158,9 +161,16 @@ $$;
 -- ---------------------------------------------------------------------------
 -- begin_test(label text) / end_test(label text)
 --
--- Lightweight test framing that does NOT use transactions (so RLS SET LOCAL ROLE
--- changes survive within the test body). Instead each test wraps its own
--- SAVEPOINT so rows are rolled back.
+-- Lightweight test framing. Logs labels and (in end_test) resets the role so
+-- subsequent tests start from a clean principal.
+--
+-- NOTE: per-test SAVEPOINTs are NOT issued here because plpgsql EXECUTE cannot
+-- emit transaction-control commands ("EXECUTE of transaction commands is not
+-- implemented"). Test isolation comes from the outer `BEGIN; ... ROLLBACK;`
+-- that wraps each test file — state mutations within the file are rolled back
+-- at file end. Within-file ordering matters: DML tests should come last, or
+-- tests should be designed so their mutations (if allowed by RLS) don't break
+-- later assertions.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION tests.begin_test(p_label text)
   RETURNS void
@@ -168,7 +178,6 @@ CREATE OR REPLACE FUNCTION tests.begin_test(p_label text)
 AS $$
 BEGIN
   RAISE NOTICE '[TEST] %', p_label;
-  EXECUTE format('SAVEPOINT test_%s', md5(p_label));
 END;
 $$;
 
@@ -177,13 +186,19 @@ CREATE OR REPLACE FUNCTION tests.end_test(p_label text)
   LANGUAGE plpgsql
 AS $$
 BEGIN
-  EXECUTE format('ROLLBACK TO SAVEPOINT test_%s', md5(p_label));
-  EXECUTE format('RELEASE SAVEPOINT test_%s', md5(p_label));
   PERFORM tests.reset_role();
   RAISE NOTICE '[PASS] %', p_label;
 END;
 $$;
 
--- Grant usage on the tests schema to postgres (used by psql runner)
-CREATE SCHEMA IF NOT EXISTS tests;
-GRANT USAGE ON SCHEMA tests TO postgres;
+-- Grant usage on the tests schema to every role that may call these helpers
+-- during a test. After set_as_parent / set_as_child, the session role switches
+-- to 'authenticated', and after set_as_anon it switches to 'anon'. Both need
+-- USAGE on the schema plus EXECUTE on each function; otherwise subsequent
+-- tests.end_test() / tests.expect_rows() calls fail with
+--   ERROR: permission denied for schema tests
+GRANT USAGE ON SCHEMA tests TO postgres, authenticated, anon, service_role;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA tests
+  TO postgres, authenticated, anon, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA tests
+  GRANT EXECUTE ON FUNCTIONS TO postgres, authenticated, anon, service_role;
