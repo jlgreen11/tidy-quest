@@ -193,11 +193,22 @@ private struct RewardIconPickerView: View {
 
     private let columns = [GridItem(.adaptive(minimum: 56))]
 
+    private func iconBackground(isSelected: Bool) -> some View {
+        RoundedRectangle(cornerRadius: 12)
+            .fill(isSelected ? Color.accentColor.opacity(0.15) : Color(.tertiarySystemFill))
+    }
+
+    private func iconBorder(isSelected: Bool) -> some View {
+        RoundedRectangle(cornerRadius: 12)
+            .strokeBorder(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(icons, id: \.self) { icon in
+                        let isSelected = selectedIcon == icon
                         Button {
                             selectedIcon = icon
                             dismiss()
@@ -205,23 +216,12 @@ private struct RewardIconPickerView: View {
                             Image(systemName: icon)
                                 .font(.title2)
                                 .frame(width: 52, height: 52)
-                                .background(
-                                    selectedIcon == icon
-                                        ? Color.accentColor.opacity(0.15)
-                                        : Color(.tertiarySystemFill),
-                                    in: RoundedRectangle(cornerRadius: 12)
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .strokeBorder(
-                                            selectedIcon == icon ? Color.accentColor : Color.clear,
-                                            lineWidth: 2
-                                        )
-                                )
-                                .foregroundStyle(selectedIcon == icon ? .accentColor : .primary)
+                                .background(iconBackground(isSelected: isSelected))
+                                .overlay(iconBorder(isSelected: isSelected))
+                                .foregroundStyle(isSelected ? Color.accentColor : Color.primary)
                         }
                         .accessibilityLabel("Icon: \(icon)")
-                        .accessibilityHint(selectedIcon == icon ? "Currently selected" : "Tap to select")
+                        .accessibilityHint(isSelected ? "Currently selected" : "Tap to select")
                     }
                 }
                 .padding()
