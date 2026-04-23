@@ -30,11 +30,17 @@ jobs:
             --project-id "${{ secrets.SUPABASE_PROJECT_ID_STAGING }}"
 
       # ── Edge functions ───────────────────────────────────────────────────
+      # --no-verify-jwt is required: our edge functions authenticate via
+      # Apple JWTs (parseAppleJwt) and device tokens (parseDeviceToken), not
+      # Supabase-issued JWTs. Without this flag, Supabase's platform gateway
+      # rejects every request before it reaches our auth.ts — see the F4
+      # deploy-propagation finding.
       - name: Deploy edge functions
         if: ${{ env.SUPABASE_ACCESS_TOKEN != '' }}
         run: |
           supabase functions deploy \
-            --project-id "${{ secrets.SUPABASE_PROJECT_ID_STAGING }}"
+            --project-id "${{ secrets.SUPABASE_PROJECT_ID_STAGING }}" \
+            --no-verify-jwt
 
       # ── Set edge function secrets ────────────────────────────────────────
       - name: Set edge function secrets
