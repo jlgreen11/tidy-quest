@@ -278,46 +278,52 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
             PointTransaction(id: UUID(), userId: kidId, familyId: family, amount: amt, kind: kind, referenceId: nil, reason: reason, createdByUserId: actor ?? kidId, idempotencyKey: UUID(), choreInstanceId: nil, createdAt: now.addingTimeInterval(-agoSec), reversedByTransactionId: nil)
         }
         // Baseline history per kid — chosen to hit plausible balances matching seed.sql patterns.
+        // First transaction is an opening adjustment representing the 3-week earning
+        // history that the full DB seed models procedurally; keeping recent events
+        // below it so the ledger view has something substantive to show.
         switch kidId {
-        case SeedID.ava: // 6yo starter, ~180 pts
+        case SeedID.ava: // 6yo starter, target ~340 pts (Lego saving goal at 340/800)
             return [
-                tx(5,  .choreCompletion, nil, 14_400),   // make bed 4h ago
-                tx(3,  .choreCompletion, nil, 36_000),   // brush teeth yesterday
-                tx(5,  .choreCompletion, nil, 122_400),  // day-2
-                tx(8,  .choreBonus,     nil, 190_000),   // routine bonus day-3
+                tx(334, .adjustment, "Opening balance", 1_728_000, sentinel),
+                tx(5,  .choreCompletion, nil, 14_400),
+                tx(3,  .choreCompletion, nil, 36_000),
+                tx(5,  .choreCompletion, nil, 122_400),
+                tx(8,  .choreBonus,     nil, 190_000),
                 tx(-15, .redemption,    "Ice cream after dinner", 259_200)
             ]
-        case SeedID.kai: // 9yo standard, ~420 pts, ADHD, 14-day streak
+        case SeedID.kai: // 9yo standard, target ~420 pts, ADHD, 14-day streak
             return [
+                tx(415, .adjustment, "Opening balance", 1_728_000, sentinel),
                 tx(5,  .choreCompletion, nil, 18_000),
-                tx(15, .choreCompletion, nil, 86_400),   // homework yesterday
-                tx(25, .streakBonus,    nil, 90_000),    // 14-day streak bonus
-                tx(30, .choreCompletion, nil, 170_000),  // bathroom clean Sat
+                tx(15, .choreCompletion, nil, 86_400),
+                tx(25, .streakBonus,    nil, 90_000),
+                tx(30, .choreCompletion, nil, 170_000),
                 tx(-75, .redemption,    "30 min tablet time", 259_200),
                 tx(5,  .choreCompletion, nil, 345_600)
             ]
-        case SeedID.zara: // 12yo advanced, ~560 pts, contested fine
+        case SeedID.zara: // 12yo advanced, target ~560 pts, cash-out user, contested fine
             return [
+                tx(585, .adjustment, "Opening balance", 1_728_000, sentinel),
                 tx(12, .choreCompletion, nil, 14_400),
-                tx(8,  .choreCompletion, nil, 50_400),   // cats yesterday
+                tx(8,  .choreCompletion, nil, 50_400),
                 tx(-5, .fine,           "Rude to sibling", 172_800, UUID(uuidString: "22222222-2222-2222-2222-222222222221")),
-                tx(40, .choreCompletion, nil, 259_200),  // vacuum Sat
+                tx(40, .choreCompletion, nil, 259_200),
                 tx(-100, .redemption,   "Cash-out $1 (IOU)", 345_600),
                 tx(12, .choreCompletion, nil, 432_000),
                 tx(8,  .choreCompletion, nil, 518_400)
             ]
-        case SeedID.theo: // 5yo starter, ~95 pts
+        case SeedID.theo: // 5yo starter, target ~95 pts
             return [
+                tx(84, .adjustment, "Opening balance", 1_728_000, sentinel),
                 tx(8,  .choreCompletion, nil, 10_800),
-                tx(5,  .choreCompletion, nil, 72_000),   // yesterday toys
+                tx(5,  .choreCompletion, nil, 72_000),
                 tx(-10, .fine,          "Rude to sibling", 90_000, UUID(uuidString: "22222222-2222-2222-2222-222222222221")),
-                tx(8,  .choreCompletion, nil, 172_800),  // dog-fed day-2
+                tx(8,  .choreCompletion, nil, 172_800),
                 tx(8,  .choreCompletion, nil, 259_200)
             ]
         default:
             return []
         }
-        _ = sentinel
     }
 
     /// Convenience: balance for a kid derived from seedTransactions.

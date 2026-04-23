@@ -49,8 +49,16 @@ struct TidyQuestParentApp: App {
             )
             .task {
                 #if DEBUG
-                // Seed data loaded for mock; skip live auth
+                // Seed every repository so the simulator launches with the full
+                // Chen-Rodriguez family visible: kids, today's chores, ledger.
                 familyRepo.loadSeedData()
+                choreRepo.loadSeedTemplates(MockAPIClient.seedTemplates)
+                choreRepo.loadSeedInstances(MockAPIClient.seedTodayInstances)
+                for kid in familyRepo.kids {
+                    let txns = MockAPIClient.seedTransactions(for: kid.id)
+                    ledgerRepo.setTransactions(txns, for: kid.id)
+                    ledgerRepo.setBalance(txns.reduce(0) { $0 + $1.amount }, for: kid.id)
+                }
                 #else
                 await authController.restoreSession()
                 #endif
