@@ -87,63 +87,63 @@ public final class SupabaseAPIClient: APIClient {
     // MARK: - Family
 
     public func createFamily(_ req: CreateFamilyRequest) async throws -> Family {
-        try await invoke(function: "family.create", body: req)
+        try await invoke(function: "family-create", body: req)
     }
 
     public func updateFamily(_ req: UpdateFamilyRequest) async throws -> Family {
-        try await invoke(function: "family.update", body: req)
+        try await invoke(function: "family-update", body: req)
     }
 
     public func deleteFamily(_ req: DeleteFamilyRequest) async throws {
-        try await invokeVoid(function: "family.delete", body: req)
+        try await invokeVoid(function: "family-delete", body: req)
     }
 
     // MARK: - Users
 
     public func addKid(_ req: AddKidRequest) async throws -> AppUser {
-        try await invoke(function: "user.add-kid", body: req)
+        try await invoke(function: "user-add-kid", body: req)
     }
 
     public func pairDevice(_ req: PairDeviceRequest) async throws -> PairingCode {
-        try await invoke(function: "user.pair-device", body: req)
+        try await invoke(function: "user-pair-device", body: req)
     }
 
     public func claimPairing(_ req: ClaimPairingRequest) async throws -> DeviceClaimResult {
-        try await invoke(function: "user.claim-pair", body: req)
+        try await invoke(function: "user-claim-pair", body: req)
     }
 
     public func revokeDevice(_ req: RevokeDeviceRequest) async throws {
-        try await invokeVoid(function: "user.revoke-device", body: req)
+        try await invokeVoid(function: "user-revoke-device", body: req)
     }
 
     // MARK: - Chores
 
     public func createChoreTemplate(_ req: CreateChoreTemplateRequest) async throws -> ChoreTemplate {
-        try await invoke(function: "chore-template.create", body: req)
+        try await invoke(function: "chore-template-create", body: req)
     }
 
     public func updateChoreTemplate(_ req: UpdateChoreTemplateRequest) async throws -> ChoreTemplate {
-        try await invoke(function: "chore-template.update", body: req)
+        try await invoke(function: "chore-template-update", body: req)
     }
 
     public func archiveChoreTemplate(_ id: UUID) async throws {
         struct Body: Encodable { let template_id: UUID }
-        try await invokeVoid(function: "chore-template.archive", body: Body(template_id: id))
+        try await invokeVoid(function: "chore-template-archive", body: Body(template_id: id))
     }
 
     public func completeChoreInstance(_ req: CompleteChoreRequest) async throws -> CompleteChoreResponse {
-        try await invoke(function: "chore-instance.complete", body: req)
+        try await invoke(function: "chore-instance-complete", body: req)
     }
 
     public func approveChoreInstance(_ id: UUID) async throws -> ChoreInstance {
         struct Body: Encodable { let instance_id: UUID }
-        return try await invoke(function: "chore-instance.approve", body: Body(instance_id: id))
+        return try await invoke(function: "chore-instance-approve", body: Body(instance_id: id))
     }
 
     public func rejectChoreInstance(_ id: UUID, reason: String?) async throws -> ChoreInstance {
         struct Body: Encodable { let instance_id: UUID; let reason: String? }
         return try await invoke(
-            function: "chore-instance.reject",
+            function: "chore-instance-reject",
             body: Body(instance_id: id, reason: reason)
         )
     }
@@ -151,13 +151,13 @@ public final class SupabaseAPIClient: APIClient {
     // MARK: - Ledger & Redemption
 
     public func requestRedemption(_ req: RequestRedemptionRequest) async throws -> RedemptionRequest {
-        try await invoke(function: "redemption.request", body: req)
+        try await invoke(function: "redemption-request", body: req)
     }
 
     public func approveRedemption(_ id: UUID, appAttestToken: String) async throws -> RedemptionApprovedResponse {
         struct Body: Encodable { let request_id: UUID; let app_attest_token: String }
         return try await invoke(
-            function: "redemption.approve",
+            function: "redemption-approve",
             body: Body(request_id: id, app_attest_token: appAttestToken)
         )
     }
@@ -165,21 +165,21 @@ public final class SupabaseAPIClient: APIClient {
     public func denyRedemption(_ id: UUID, reason: String?) async throws -> RedemptionRequest {
         struct Body: Encodable { let request_id: UUID; let reason: String? }
         return try await invoke(
-            function: "redemption.deny",
+            function: "redemption-deny",
             body: Body(request_id: id, reason: reason)
         )
     }
 
     public func issueFine(_ req: IssueFineRequest) async throws -> PointTransaction {
         struct ResponseWrapper: Decodable { let transaction: PointTransaction }
-        let wrapper: ResponseWrapper = try await invoke(function: "point-transaction.fine", body: req)
+        let wrapper: ResponseWrapper = try await invoke(function: "point-transaction-fine", body: req)
         return wrapper.transaction
     }
 
     public func reverseTransaction(_ id: UUID, reason: String, appAttestToken: String) async throws -> PointTransaction {
         struct Body: Encodable { let transaction_id: UUID; let reason: String; let app_attest_token: String }
         return try await invoke(
-            function: "point-transaction.reverse",
+            function: "point-transaction-reverse",
             body: Body(transaction_id: id, reason: reason, app_attest_token: appAttestToken)
         )
     }
@@ -195,7 +195,7 @@ public final class SupabaseAPIClient: APIClient {
 
     public func updateSubscription(_ receipt: String) async throws -> Subscription {
         struct Body: Encodable { let receipt: String }
-        return try await invoke(function: "subscription.update", body: Body(receipt: receipt))
+        return try await invoke(function: "subscription-update", body: Body(receipt: receipt))
     }
 
     // MARK: - Notifications
