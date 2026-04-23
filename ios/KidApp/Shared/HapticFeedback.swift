@@ -1,4 +1,5 @@
 import UIKit
+import TidyQuestCore
 
 // MARK: - HapticFeedback
 
@@ -46,7 +47,7 @@ enum HapticFeedback {
 
     /// Fires the appropriate completion haptic for the given tier.
     /// Advanced tier uses a quieter light impact per PLAN §5.4.
-    static func choreComplete(tier: TidyQuestCore.Tier) {
+    static func choreComplete(tier: Tier) {
         switch tier {
         case .starter, .standard: medium()
         case .advanced:           light()
@@ -55,7 +56,7 @@ enum HapticFeedback {
 
     /// Fires the routine-complete celebration haptic.
     /// Advanced tier skips the heavy pulse.
-    static func routineComplete(tier: TidyQuestCore.Tier) {
+    static func routineComplete(tier: Tier) {
         switch tier {
         case .starter, .standard: heavy()
         case .advanced:           medium()
