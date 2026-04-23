@@ -33,11 +33,6 @@ struct TidyQuestParentApp: App {
         _ledgerRepo     = State(initialValue: LedgerRepository(apiClient: client))
         _rewardRepo     = State(initialValue: RewardRepository(apiClient: client))
 
-        #if DEBUG
-        // Pre-load seed data so simulator launches with a real family
-        let fRepo = FamilyRepository(apiClient: client)
-        fRepo.loadSeedData()
-        #endif
     }
 
     // MARK: - Scene
@@ -49,11 +44,12 @@ struct TidyQuestParentApp: App {
                 familyRepo: familyRepo,
                 choreRepo: choreRepo,
                 ledgerRepo: ledgerRepo,
-                rewardRepo: rewardRepo
+                rewardRepo: rewardRepo,
+                apiClient: apiClient
             )
             .task {
                 #if DEBUG
-                // Seed data loaded in init for mock; skip live auth
+                // Seed data loaded for mock; skip live auth
                 familyRepo.loadSeedData()
                 #else
                 await authController.restoreSession()
@@ -77,12 +73,14 @@ private struct RootGate: View {
     var choreRepo: ChoreRepository
     var ledgerRepo: LedgerRepository
     var rewardRepo: RewardRepository
+    var apiClient: any APIClient
 
     var body: some View {
         if authController.currentUser == nil && familyRepo.family == nil {
             OnboardingFlow(
                 familyRepo: familyRepo,
                 authController: authController,
+                apiClient: apiClient,
                 onComplete: {
                     // After onboarding, family is created; RootGate re-evaluates.
                 }

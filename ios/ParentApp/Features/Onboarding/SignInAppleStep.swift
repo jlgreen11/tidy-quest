@@ -11,6 +11,7 @@ struct SignInAppleStep: View {
       var draft: CreateFamilyDraft
       let onContinue: () -> Void
     @State private var errorMessage: String? = nil
+    @State private var isCreatingFamily: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,9 +39,9 @@ struct SignInAppleStep: View {
             Spacer()
 
             VStack(spacing: 16) {
-                if authController.isLoading {
-                    ProgressView("Signing in…")
-                        .accessibilityLabel("Signing in with Apple")
+                if authController.isLoading || isCreatingFamily {
+                    ProgressView(isCreatingFamily ? "Creating family…" : "Signing in…")
+                        .accessibilityLabel(isCreatingFamily ? "Creating family" : "Signing in with Apple")
                 } else {
                     SignInWithAppleButton(.signIn, onRequest: configureRequest, onCompletion: handleResult)
                         .signInWithAppleButtonStyle(.black)
@@ -63,6 +64,7 @@ struct SignInAppleStep: View {
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .disabled(isCreatingFamily)
                 .accessibilityLabel("Skip sign in (development only)")
                 #endif
             }
@@ -93,11 +95,19 @@ struct SignInAppleStep: View {
     }
 
     private func createFamilyAndContinue(displayName: String) async {
+        isCreatingFamily = true
+        errorMessage = nil
+        defer { isCreatingFamily = false }
         let req = CreateFamilyRequest(
             name: draft.familyName.isEmpty ? "\(displayName)'s Family" : draft.familyName,
             timezone: draft.timezone
         )
         await familyRepo.createFamily(req)
+        if let err = familyRepo.error {
+            errorMessage = err.localizedDescription
+            return
+        }
+        draft.createdFamily = familyRepo.family
         onContinue()
     }
 }

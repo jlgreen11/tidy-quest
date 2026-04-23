@@ -5,11 +5,13 @@ import TidyQuestCore
 @available(iOS 17, *)
 struct SubscriptionGateStep: View {
 
-    var familyRepo: FamilyRepository
+    var apiClient: any APIClient
     let onContinue: () -> Void
 
     @State private var isPurchasing: Bool = false
     @State private var selectedProduct: ProductOption? = nil
+    @State private var errorMessage: String? = nil
+    @State private var showAlert: Bool = false
 
     enum ProductOption: String, CaseIterable, Identifiable {
         case monthly = "com.jlgreen11.tidyquest.monthly"
@@ -78,7 +80,7 @@ struct SubscriptionGateStep: View {
 
                 // Primary CTA
                 Button {
-                    Task { await purchase() }
+                    Task { await startTrial() }
                 } label: {
                     HStack {
                         Spacer()
@@ -102,6 +104,7 @@ struct SubscriptionGateStep: View {
                 Button("Skip — decide later", action: onContinue)
                     .font(.body)
                     .foregroundStyle(.secondary)
+                    .disabled(isPurchasing)
                     .padding(.bottom, 40)
                     .accessibilityLabel("Skip subscription for now and decide later")
 
@@ -113,17 +116,29 @@ struct SubscriptionGateStep: View {
                     .padding(.bottom, 24)
             }
         }
+        .alert("Trial Activation Failed", isPresented: $showAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage ?? "An error occurred.")
+        }
     }
 
     // MARK: - Helpers
 
-    private func purchase() async {
+    private func startTrial() async {
         isPurchasing = true
         defer { isPurchasing = false }
-        // In production: call StoreKit 2 Product.purchase()
-        // Then: await familyRepo.apiClient.updateSubscription(receiptToken)
-        try? await Task.sleep(for: .milliseconds(800))
-        onContinue()
+
+        // In production: call StoreKit 2 Product.purchase() and pass the real receipt.
+        // The mock server accepts any receipt starting with "mock-trial-".
+        let mockReceipt = "mock-trial-\(UUID().uuidString)"
+        do {
+            _ = try await apiClient.updateSubscription(mockReceipt)
+            onContinue()
+        } catch {
+            errorMessage = error.localizedDescription
+            showAlert = true
+        }
     }
 }
 
@@ -191,6 +206,5 @@ private struct ProductCard: View {
 
 #Preview("SubscriptionGateStep") {
     let client = MockAPIClient()
-    let family = FamilyRepository(apiClient: client)
-    return SubscriptionGateStep(familyRepo: family, onContinue: { })
+    return SubscriptionGateStep(apiClient: client, onContinue: { })
 }

@@ -6,7 +6,9 @@ import TidyQuestCore
 struct AddFirstKidStep: View {
 
       @Bindable var draft: CreateFamilyDraft
+      var familyRepo: FamilyRepository
       let onContinue: () -> Void
+
     // 24 avatar stub identifiers (illustrated in production)
     private static let avatarOptions: [String] = (1...24).map { "kid-\($0)" }
     private static let avatarIcons: [String] = [
@@ -18,7 +20,10 @@ struct AddFirstKidStep: View {
         "magnifyingglass", "hammer.fill", "sportscourt.fill", "figure.run"
     ]
 
-    @State private var showAgeError: Bool = false
+    @State private var showNameError: Bool = false
+    @State private var isSubmitting: Bool = false
+    @State private var errorMessage: String? = nil
+    @State private var showAlert: Bool = false
 
     var body: some View {
         ScrollView {
@@ -43,6 +48,7 @@ struct AddFirstKidStep: View {
                         .textContentType(.name)
                         .textFieldStyle(.roundedBorder)
                         .font(.body)
+                        .disabled(isSubmitting)
                         .accessibilityLabel("Kid's name")
                 }
                 .padding(.horizontal, 24)
@@ -142,22 +148,32 @@ struct AddFirstKidStep: View {
                 // Continue
                 Button {
                     guard !draft.kidName.trimmingCharacters(in: .whitespaces).isEmpty else {
-                        showAgeError = true
+                        showNameError = true
                         return
                     }
-                    onContinue()
+                    showNameError = false
+                    Task { await addKidAndContinue() }
                 } label: {
-                    Text("Continue")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
+                    HStack {
+                        Spacer()
+                        if isSubmitting {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            Text("Continue")
+                                .font(.headline)
+                        }
+                        Spacer()
+                    }
+                    .padding(.vertical, 16)
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(isSubmitting)
                 .padding(.horizontal, 24)
                 .padding(.bottom, 40)
                 .accessibilityLabel("Continue with kid setup")
 
-                if showAgeError {
+                if showNameError {
                     Text("Please enter your kid's name before continuing.")
                         .font(.caption)
                         .foregroundStyle(.red)
@@ -165,6 +181,44 @@ struct AddFirstKidStep: View {
                 }
             }
         }
+        .alert("Could Not Add Kid", isPresented: $showAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage ?? "An error occurred.")
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func addKidAndContinue() async {
+        isSubmitting = true
+        errorMessage = nil
+        defer { isSubmitting = false }
+
+        guard let familyId = draft.createdFamily?.id else {
+            // Family not yet created — skip kid creation and proceed
+            onContinue()
+            return
+        }
+
+        let req = AddKidRequest(
+            familyId: familyId,
+            displayName: draft.kidName.trimmingCharacters(in: .whitespaces),
+            avatar: draft.kidAvatar,
+            color: "#\(draft.kidColor.hex)",
+            complexityTier: draft.kidTier,
+            birthdate: nil
+        )
+        await familyRepo.addKid(req)
+
+        if let err = familyRepo.error {
+            errorMessage = err.localizedDescription
+            showAlert = true
+            return
+        }
+
+        draft.createdKid = familyRepo.kids.last
+        onContinue()
     }
 }
 
@@ -187,5 +241,7 @@ private extension Color {
 // MARK: - Preview
 
 #Preview("AddFirstKidStep") {
-    AddFirstKidStep(draft: CreateFamilyDraft(), onContinue: { })
+    let client = MockAPIClient()
+    let family = FamilyRepository(apiClient: client)
+    return AddFirstKidStep(draft: CreateFamilyDraft(), familyRepo: family, onContinue: { })
 }

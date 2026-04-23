@@ -123,8 +123,7 @@ struct PairKidDeviceStep: View {
         isGenerating = true
         defer { isGenerating = false }
 
-        // Use a stub kid ID — in production this would be draft.createdKid?.id
-        let kidId = UUID()
+        let kidId = draft.createdKid?.id ?? UUID()
         do {
             let pairing = try await familyRepo.pairDevice(for: kidId)
             pairingCode = pairing.code

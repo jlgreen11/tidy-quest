@@ -6,8 +6,13 @@ import TidyQuestCore
 struct ReviewChoresStep: View {
 
       var draft: CreateFamilyDraft
+      var apiClient: any APIClient
       let onContinue: () -> Void
+
     @State private var editingChore: DraftChore? = nil
+    @State private var isSubmitting: Bool = false
+    @State private var errorMessage: String? = nil
+    @State private var showAlert: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -20,13 +25,24 @@ struct ReviewChoresStep: View {
 
                 Divider()
 
-                Button(action: onContinue) {
-                    Text("Looks good — continue")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
+                Button {
+                    Task { await createChoresAndContinue() }
+                } label: {
+                    HStack {
+                        Spacer()
+                        if isSubmitting {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            Text("Looks good — continue")
+                                .font(.headline)
+                        }
+                        Spacer()
+                    }
+                    .padding(.vertical, 16)
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(isSubmitting)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 16)
                 .accessibilityLabel("Continue with these chores")
@@ -40,6 +56,11 @@ struct ReviewChoresStep: View {
                     }
                     editingChore = nil
                 }
+            }
+            .alert("Could Not Save Chores", isPresented: $showAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(errorMessage ?? "An error occurred.")
             }
         }
     }
@@ -109,6 +130,50 @@ struct ReviewChoresStep: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .combine)
     }
+
+    // MARK: - Helpers
+
+    private func createChoresAndContinue() async {
+        // If no family or kid yet, or no chores to create, skip API and proceed
+        guard let familyId = draft.createdFamily?.id, !draft.chores.isEmpty else {
+            onContinue()
+            return
+        }
+
+        let kidIds: [UUID] = draft.createdKid.map { [$0.id] } ?? []
+        let choresToCreate = draft.chores
+        let dailySchedule: [String: AnyCodable] = [
+            "daysOfWeek": AnyCodable([AnyCodable(0), AnyCodable(1), AnyCodable(2),
+                                      AnyCodable(3), AnyCodable(4), AnyCodable(5), AnyCodable(6)])
+        ]
+
+        isSubmitting = true
+        defer { isSubmitting = false }
+
+        do {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                for chore in choresToCreate {
+                    group.addTask {
+                        let req = CreateChoreTemplateRequest(
+                            familyId: familyId,
+                            name: chore.name,
+                            icon: chore.icon,
+                            type: .daily,
+                            schedule: dailySchedule,
+                            targetUserIds: kidIds,
+                            basePoints: chore.points
+                        )
+                        _ = try await apiClient.createChoreTemplate(req)
+                    }
+                }
+                try await group.waitForAll()
+            }
+            onContinue()
+        } catch {
+            errorMessage = error.localizedDescription
+            showAlert = true
+        }
+    }
 }
 
 // MARK: - Chore edit sheet
@@ -165,5 +230,5 @@ private struct ChoreEditSheet: View {
 #Preview("ReviewChoresStep") {
     let draft = CreateFamilyDraft()
     draft.chores = PresetPack.standard810.prefillChores
-    return ReviewChoresStep(draft: draft, onContinue: { })
+    return ReviewChoresStep(draft: draft, apiClient: MockAPIClient(), onContinue: { })
 }

@@ -111,6 +111,7 @@ struct OnboardingFlow: View {
 
     var familyRepo: FamilyRepository
     var authController: AuthController
+    var apiClient: any APIClient
     var onComplete: () -> Void
 
     @State private var draft = CreateFamilyDraft()
@@ -160,22 +161,23 @@ struct OnboardingFlow: View {
                 onContinue: advance
             )
         case 2:
-            CoParentInviteStep(draft: draft, onContinue: advance)
+            CoParentInviteStep(draft: draft, familyRepo: familyRepo, onContinue: advance)
         case 3:
-            AddFirstKidStep(draft: draft, onContinue: advance)
+            AddFirstKidStep(draft: draft, familyRepo: familyRepo, onContinue: advance)
         case 4:
             PairKidDeviceStep(draft: draft, familyRepo: familyRepo, onContinue: advance)
         case 5:
             PresetPackStep(draft: draft, onContinue: advance)
         case 6:
-            ReviewChoresStep(draft: draft, onContinue: advance)
+            ReviewChoresStep(draft: draft, apiClient: apiClient, onContinue: advance)
         case 7:
-            ReminderCadenceStep(draft: draft, onContinue: advance)
+            ReminderCadenceStep(draft: draft, familyRepo: familyRepo, onContinue: advance)
         case 8:
-            SubscriptionGateStep(familyRepo: familyRepo, onContinue: advance)
+            SubscriptionGateStep(apiClient: apiClient, onContinue: advance)
         case 9:
             OnboardingCompleteStep(
                 draft: draft,
+                familyRepo: familyRepo,
                 onComplete: onComplete
             )
         default:
@@ -233,6 +235,7 @@ private struct ProgressDotsView: View {
     return OnboardingFlow(
         familyRepo: family,
         authController: auth,
+        apiClient: client,
         onComplete: { }
     )
 }

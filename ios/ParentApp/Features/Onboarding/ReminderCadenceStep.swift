@@ -6,12 +6,18 @@ import TidyQuestCore
 struct ReminderCadenceStep: View {
 
       var draft: CreateFamilyDraft
+      var familyRepo: FamilyRepository
       let onContinue: () -> Void
+
     @State private var morningReminder: Date
     @State private var afternoonReminder: Date
+    @State private var isSaving: Bool = false
+    @State private var errorMessage: String? = nil
+    @State private var showAlert: Bool = false
 
-    init(draft: CreateFamilyDraft, onContinue: @escaping () -> Void) {
+    init(draft: CreateFamilyDraft, familyRepo: FamilyRepository, onContinue: @escaping () -> Void) {
         self.draft = draft
+        self.familyRepo = familyRepo
         self.onContinue = onContinue
         _morningReminder = State(initialValue: Self.makeDate(hour: draft.morningReminderHour, minute: draft.morningReminderMinute))
         _afternoonReminder = State(initialValue: Self.makeDate(hour: draft.afternoonReminderHour, minute: draft.afternoonReminderMinute))
@@ -80,29 +86,79 @@ struct ReminderCadenceStep: View {
                 .frame(maxHeight: 200)
                 .scrollDisabled(true)
 
-                Button(action: onContinue) {
-                    Text("Set reminders")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
+                Button {
+                    Task { await saveRemindersAndContinue() }
+                } label: {
+                    HStack {
+                        Spacer()
+                        if isSaving {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            Text("Set reminders")
+                                .font(.headline)
+                        }
+                        Spacer()
+                    }
+                    .padding(.vertical, 16)
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(isSaving)
                 .padding(.horizontal, 24)
                 .accessibilityLabel("Set reminders and continue")
 
                 Button("Skip reminders", action: onContinue)
                     .font(.body)
                     .foregroundStyle(.secondary)
+                    .disabled(isSaving)
                     .accessibilityLabel("Skip setting reminders for now")
             }
             .padding(.bottom, 40)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .alert("Could Not Save Reminders", isPresented: $showAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage ?? "An error occurred.")
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func saveRemindersAndContinue() async {
+        guard let familyId = draft.createdFamily?.id else {
+            // No family yet — proceed without saving
+            onContinue()
+            return
+        }
+
+        isSaving = true
+        defer { isSaving = false }
+
+        // UpdateFamilyRequest does not have reminder fields; they go in the settings jsonb.
+        // The available fields are name, timezone, leaderboardEnabled, siblingLedgerVisible,
+        // dailyDeductionCap, weeklyDeductionCap — no settings blob parameter.
+        // TODO: Once UpdateFamilyRequest gains a `settings` field (agent E3 or schema update),
+        // pass morning/afternoon reminder times as:
+        //   settings: ["morning_reminder": "\(draft.morningReminderHour):\(String(format: "%02d", draft.morningReminderMinute))",
+        //              "afternoon_reminder": "\(draft.afternoonReminderHour):\(String(format: "%02d", draft.afternoonReminderMinute))"]
+        let req = UpdateFamilyRequest(familyId: familyId)
+        await familyRepo.updateFamily(req)
+
+        if let err = familyRepo.error {
+            errorMessage = err.localizedDescription
+            showAlert = true
+            return
+        }
+
+        onContinue()
     }
 }
 
 // MARK: - Preview
 
 #Preview("ReminderCadenceStep") {
-    ReminderCadenceStep(draft: CreateFamilyDraft(), onContinue: { })
+    let client = MockAPIClient()
+    let family = FamilyRepository(apiClient: client)
+    return ReminderCadenceStep(draft: CreateFamilyDraft(), familyRepo: family, onContinue: { })
 }

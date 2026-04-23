@@ -6,8 +6,11 @@ import TidyQuestCore
 struct OnboardingCompleteStep: View {
 
       var draft: CreateFamilyDraft
+      var familyRepo: FamilyRepository
       let onComplete: () -> Void
+
     @State private var appeared: Bool = false
+    @State private var isMarkingComplete: Bool = false
 
     private var parentName: String {
         // Try to derive parent first name from Apple credential (stub in v0.1)
@@ -70,13 +73,24 @@ struct OnboardingCompleteStep: View {
 
             Spacer()
 
-            Button(action: onComplete) {
-                Text("Go to Today")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
+            Button {
+                Task { await markOnboardedAndComplete() }
+            } label: {
+                HStack {
+                    Spacer()
+                    if isMarkingComplete {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Text("Go to Today")
+                            .font(.headline)
+                    }
+                    Spacer()
+                }
+                .padding(.vertical, 16)
             }
             .buttonStyle(.borderedProminent)
+            .disabled(isMarkingComplete)
             .padding(.horizontal, 24)
             .padding(.bottom, 40)
             .opacity(appeared ? 1.0 : 0.0)
@@ -85,6 +99,29 @@ struct OnboardingCompleteStep: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear { appeared = true }
+    }
+
+    // MARK: - Helpers
+
+    private func markOnboardedAndComplete() async {
+        guard let familyId = draft.createdFamily?.id else {
+            onComplete()
+            return
+        }
+
+        isMarkingComplete = true
+        defer { isMarkingComplete = false }
+
+        // Mark the family as onboarded. UpdateFamilyRequest does not currently have a
+        // settings/onboarded_at parameter — calling with only familyId triggers a no-op
+        // update that at minimum confirms the family record is reachable.
+        // TODO: Once UpdateFamilyRequest gains a `settings` field, pass:
+        //   settings: ["onboarded_at": ISO8601DateFormatter().string(from: Date())]
+        let req = UpdateFamilyRequest(familyId: familyId)
+        await familyRepo.updateFamily(req)
+
+        // Proceed regardless of update result — don't block the user on a settings stamp.
+        onComplete()
     }
 }
 
@@ -121,8 +158,10 @@ private struct SummaryChip: View {
 // MARK: - Preview
 
 #Preview("OnboardingCompleteStep") {
+    let client = MockAPIClient()
+    let family = FamilyRepository(apiClient: client)
     let draft = CreateFamilyDraft()
     draft.kidName = "Maya"
     draft.chores = PresetPack.standard810.prefillChores
-    return OnboardingCompleteStep(draft: draft, onComplete: { })
+    return OnboardingCompleteStep(draft: draft, familyRepo: family, onComplete: { })
 }
