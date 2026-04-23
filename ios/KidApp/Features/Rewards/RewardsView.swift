@@ -238,6 +238,7 @@ struct RewardsView: View {
         switch c {
         case .screenTime: "Screen Time"
         case .treat:      "Treats"
+        case .outing:     "Outings"
         case .privilege:  "Privileges"
         case .cashOut:    "Cash-out"
         case .savingGoal: "Saving Goals"
@@ -249,6 +250,7 @@ struct RewardsView: View {
         switch c {
         case .screenTime: "ipad"
         case .treat:      "fork.knife"
+        case .outing:     "figure.walk"
         case .privilege:  "crown.fill"
         case .cashOut:    "dollarsign.circle.fill"
         case .savingGoal: "star.fill"
@@ -260,6 +262,7 @@ struct RewardsView: View {
         switch c {
         case .screenTime: .blue
         case .treat:      .orange
+        case .outing:     .teal
         case .privilege:  .purple
         case .cashOut:    .green
         case .savingGoal: .indigo

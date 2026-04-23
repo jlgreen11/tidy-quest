@@ -175,12 +175,20 @@ struct RewardDetailView: View {
 
     // MARK: - Sent to parent content
 
+    @ViewBuilder private var sentToParentIcon: some View {
+        let base = Image(systemName: "paperplane.fill")
+            .font(.system(size: 44))
+            .foregroundStyle(.blue)
+        if #available(iOS 18.0, *) {
+            base.symbolEffect(.bounce, options: .speed(0.8))
+        } else {
+            base
+        }
+    }
+
     private var sentToParentContent: some View {
         VStack(spacing: 12) {
-            Image(systemName: "paperplane.fill")
-                .font(.system(size: 44))
-                .foregroundStyle(.blue)
-                .symbolEffect(.bounce, options: .speed(0.8))
+            sentToParentIcon
 
             Text("Request sent to \(parentName)!")
                 .font(tier.headlineFont)
@@ -202,12 +210,20 @@ struct RewardDetailView: View {
 
     // MARK: - Redeemed content
 
+    @ViewBuilder private func redeemedIcon() -> some View {
+        let base = Image(systemName: "star.circle.fill")
+            .font(.system(size: 56))
+            .foregroundStyle(.yellow)
+        if #available(iOS 18.0, *) {
+            base.symbolEffect(.bounce, options: .speed(0.8))
+        } else {
+            base
+        }
+    }
+
     private func redeemedContent(balanceAfter: Int) -> some View {
         VStack(spacing: 12) {
-            Image(systemName: "star.circle.fill")
-                .font(.system(size: 56))
-                .foregroundStyle(.yellow)
-                .symbolEffect(.bounce, options: .speed(0.8))
+            redeemedIcon()
 
             Text("Redeemed!")
                 .font(tier.headlineFont)
@@ -276,6 +292,7 @@ struct RewardDetailView: View {
         switch reward.category {
         case .screenTime:  .blue
         case .treat:       .orange
+        case .outing:      .teal
         case .privilege:   .purple
         case .cashOut:     .green
         case .savingGoal:  .indigo

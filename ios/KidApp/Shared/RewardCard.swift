@@ -117,10 +117,10 @@ struct RewardCard: View {
     }
 
     private var categoryColor: Color {
-        // Note: .outing not yet in Core enum — ESCALATE for conductor to add.
         switch reward.category {
         case .screenTime:  .blue
         case .treat:       .orange
+        case .outing:      .teal
         case .privilege:   .purple
         case .cashOut:     .green
         case .savingGoal:  .indigo
