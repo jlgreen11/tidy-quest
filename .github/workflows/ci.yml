@@ -118,6 +118,17 @@ jobs:
         # start` left behind. Default behavior runs supabase/seed.sql.
         run: supabase db reset
 
+      - name: Ensure psql is installed
+        # run_all.sh shells out to psql against 127.0.0.1:54322. Ubuntu
+        # runners usually include postgresql-client; pin the install for
+        # determinism.
+        run: |
+          if ! command -v psql >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y postgresql-client
+          fi
+          psql --version
+
       - name: Run RLS test suite
         run: bash supabase/tests/rls/run_all.sh --ci
 
