@@ -164,22 +164,26 @@ $$);
 SELECT tests.end_test('family: child cannot INSERT family row');
 
 -- ============================================================================
--- Test 10: Parent can DELETE own family (soft-delete by policy)
+-- Test 10: Parent can soft-delete own family (UPDATE deleted_at)
+--   Note: hard DELETE from `family` is blocked by FK constraints whenever
+--   child rows exist (point_transaction.family_id has no ON DELETE CASCADE
+--   because the ledger is append-only). Product intent is soft-delete via
+--   the `deleted_at` column; that path is what RLS needs to allow.
 -- ============================================================================
-SELECT tests.begin_test('family: parent can DELETE own family row');
+SELECT tests.begin_test('family: parent can soft-delete own family');
 SELECT tests.set_as_parent(
   '22222222-2222-2222-2222-222222222221'::uuid,
   '11111111-1111-1111-1111-111111111111'::uuid
 );
--- We just verify the DELETE statement does not raise an error
-DELETE FROM family WHERE id = '11111111-1111-1111-1111-111111111111';
--- SAVEPOINT rollback in end_test restores the row
-SELECT tests.end_test('family: parent can DELETE own family row');
-
--- ============================================================================
--- Cleanup second family
--- ============================================================================
+UPDATE family
+  SET deleted_at = now()
+  WHERE id = '11111111-1111-1111-1111-111111111111';
 SET ROLE postgres;
-DELETE FROM family WHERE id = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
+SELECT tests.expect_rows(
+  'SELECT * FROM family WHERE id = ''11111111-1111-1111-1111-111111111111'' AND deleted_at IS NOT NULL',
+  1
+);
+SELECT tests.end_test('family: parent can soft-delete own family');
 
+-- Cleanup (families inserted at top are discarded by the outer ROLLBACK).
 ROLLBACK;

@@ -195,8 +195,7 @@ SELECT tests.expect_rows(
 );
 SELECT tests.end_test('audit_log: service_role can INSERT audit_log');
 
--- Cleanup
-SET ROLE postgres;
-DELETE FROM family WHERE id = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
-
+-- Cleanup — outer ROLLBACK discards everything inserted in this file,
+-- so no explicit DELETE is needed (and DELETE FROM family would fail on
+-- FK constraints from audit_log anyway).
 ROLLBACK;
