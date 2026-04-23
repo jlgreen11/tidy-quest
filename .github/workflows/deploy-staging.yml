@@ -10,6 +10,9 @@ jobs:
     name: Deploy to tidy-quest-staging
     runs-on: ubuntu-latest
     environment: staging
+    # Guard: skip noisily when secrets are not configured.
+    # Set SUPABASE_ACCESS_TOKEN in repo Settings > Secrets > Actions to enable.
+    if: ${{ secrets.SUPABASE_ACCESS_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -45,9 +48,9 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
-# ── Required GitHub Actions secrets (set in repo Settings > Secrets) ────────
-# SUPABASE_ACCESS_TOKEN        — personal access token from supabase.com/dashboard
-# SUPABASE_PROJECT_ID_STAGING  — project ref for tidy-quest-staging
+# ── Required GitHub Actions secrets (set in repo Settings > Secrets > Actions) ─
+# SUPABASE_ACCESS_TOKEN             — personal access token from supabase.com/dashboard
+# SUPABASE_PROJECT_ID_STAGING       — project ref for tidy-quest-staging
 # SUPABASE_SERVICE_ROLE_KEY_STAGING — service_role key (server-only; NEVER in iOS)
-# APNS_KEY_ID                  — Apple Push Notification key ID
-# APNS_TEAM_ID                 — Apple Developer team ID
+# APNS_KEY_ID                       — Apple Push Notification key ID
+# APNS_TEAM_ID                      — Apple Developer team ID
