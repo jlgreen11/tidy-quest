@@ -249,6 +249,85 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
                active: true, createdAt: makeDate(daysAgo: 22), archivedAt: nil)
     ]
 
+    // MARK: - Public seed accessors (for DEBUG-mode repository bootstrap)
+
+    /// Today's chore instances for the Chen-Rodriguez family. Consumed by
+    /// `ChoreRepository.loadSeedInstances` on app launch in DEBUG so the UI
+    /// renders with data instead of empty states.
+    public static var seedTodayInstances: [ChoreInstance] {
+        let today = isoDate(from: Date())
+        return [
+            ChoreInstance(id: UUID(uuidString: "66666666-6666-6666-6666-666666666601")!, templateId: SeedID.templateAvaMakeBed, userId: SeedID.ava, scheduledFor: today, windowStart: nil, windowEnd: nil, status: .approved, completedAt: Date().addingTimeInterval(-4 * 3600), approvedAt: Date().addingTimeInterval(-4 * 3600), proofPhotoId: nil, awardedPoints: 5, completedByDevice: nil, completedAsUser: nil, createdAt: Date()),
+            ChoreInstance(id: UUID(uuidString: "66666666-6666-6666-6666-666666666602")!, templateId: SeedID.templateAvaBrushTeeth, userId: SeedID.ava, scheduledFor: today, windowStart: nil, windowEnd: nil, status: .pending, completedAt: nil, approvedAt: nil, proofPhotoId: nil, awardedPoints: nil, completedByDevice: nil, completedAsUser: nil, createdAt: Date()),
+            ChoreInstance(id: UUID(uuidString: "66666666-6666-6666-6666-666666666603")!, templateId: SeedID.templateKaiMakeBed, userId: SeedID.kai, scheduledFor: today, windowStart: nil, windowEnd: nil, status: .approved, completedAt: Date().addingTimeInterval(-5 * 3600), approvedAt: Date().addingTimeInterval(-5 * 3600), proofPhotoId: nil, awardedPoints: 5, completedByDevice: nil, completedAsUser: nil, createdAt: Date()),
+            ChoreInstance(id: UUID(uuidString: "66666666-6666-6666-6666-666666666604")!, templateId: SeedID.templateKaiHomework, userId: SeedID.kai, scheduledFor: today, windowStart: nil, windowEnd: nil, status: .pending, completedAt: nil, approvedAt: nil, proofPhotoId: nil, awardedPoints: nil, completedByDevice: nil, completedAsUser: nil, createdAt: Date()),
+            ChoreInstance(id: UUID(uuidString: "66666666-6666-6666-6666-666666666605")!, templateId: SeedID.templateZaraDishwasher, userId: SeedID.zara, scheduledFor: today, windowStart: nil, windowEnd: nil, status: .pending, completedAt: nil, approvedAt: nil, proofPhotoId: nil, awardedPoints: nil, completedByDevice: nil, completedAsUser: nil, createdAt: Date()),
+            ChoreInstance(id: UUID(uuidString: "66666666-6666-6666-6666-666666666606")!, templateId: SeedID.templateZaraCats, userId: SeedID.zara, scheduledFor: today, windowStart: nil, windowEnd: nil, status: .completed, completedAt: Date().addingTimeInterval(-2 * 3600), approvedAt: nil, proofPhotoId: nil, awardedPoints: nil, completedByDevice: nil, completedAsUser: nil, createdAt: Date()),
+            ChoreInstance(id: UUID(uuidString: "66666666-6666-6666-6666-666666666607")!, templateId: SeedID.templateTheoFeedDog, userId: SeedID.theo, scheduledFor: today, windowStart: nil, windowEnd: nil, status: .completed, completedAt: Date().addingTimeInterval(-3 * 3600), approvedAt: nil, proofPhotoId: UUID(), awardedPoints: nil, completedByDevice: nil, completedAsUser: nil, createdAt: Date())
+        ]
+    }
+
+    /// Recent transactions per kid — representative balances for the demo.
+    /// Not intended to replicate the full 22-day DB history; covers the last
+    /// few events so the ledger view shows something substantive.
+    public static func seedTransactions(for kidId: UUID) -> [PointTransaction] {
+        let now = Date()
+        let family = SeedID.family
+        let sentinel = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
+        func tx(_ amt: Int, _ kind: PointTxnKind, _ reason: String? = nil, _ agoSec: TimeInterval = 3600, _ actor: UUID? = nil) -> PointTransaction {
+            PointTransaction(id: UUID(), userId: kidId, familyId: family, amount: amt, kind: kind, referenceId: nil, reason: reason, createdByUserId: actor ?? kidId, idempotencyKey: UUID(), choreInstanceId: nil, createdAt: now.addingTimeInterval(-agoSec), reversedByTransactionId: nil)
+        }
+        // Baseline history per kid — chosen to hit plausible balances matching seed.sql patterns.
+        switch kidId {
+        case SeedID.ava: // 6yo starter, ~180 pts
+            return [
+                tx(5,  .choreCompletion, nil, 14_400),   // make bed 4h ago
+                tx(3,  .choreCompletion, nil, 36_000),   // brush teeth yesterday
+                tx(5,  .choreCompletion, nil, 122_400),  // day-2
+                tx(8,  .choreBonus,     nil, 190_000),   // routine bonus day-3
+                tx(-15, .redemption,    "Ice cream after dinner", 259_200)
+            ]
+        case SeedID.kai: // 9yo standard, ~420 pts, ADHD, 14-day streak
+            return [
+                tx(5,  .choreCompletion, nil, 18_000),
+                tx(15, .choreCompletion, nil, 86_400),   // homework yesterday
+                tx(25, .streakBonus,    nil, 90_000),    // 14-day streak bonus
+                tx(30, .choreCompletion, nil, 170_000),  // bathroom clean Sat
+                tx(-75, .redemption,    "30 min tablet time", 259_200),
+                tx(5,  .choreCompletion, nil, 345_600)
+            ]
+        case SeedID.zara: // 12yo advanced, ~560 pts, contested fine
+            return [
+                tx(12, .choreCompletion, nil, 14_400),
+                tx(8,  .choreCompletion, nil, 50_400),   // cats yesterday
+                tx(-5, .fine,           "Rude to sibling", 172_800, UUID(uuidString: "22222222-2222-2222-2222-222222222221")),
+                tx(40, .choreCompletion, nil, 259_200),  // vacuum Sat
+                tx(-100, .redemption,   "Cash-out $1 (IOU)", 345_600),
+                tx(12, .choreCompletion, nil, 432_000),
+                tx(8,  .choreCompletion, nil, 518_400)
+            ]
+        case SeedID.theo: // 5yo starter, ~95 pts
+            return [
+                tx(8,  .choreCompletion, nil, 10_800),
+                tx(5,  .choreCompletion, nil, 72_000),   // yesterday toys
+                tx(-10, .fine,          "Rude to sibling", 90_000, UUID(uuidString: "22222222-2222-2222-2222-222222222221")),
+                tx(8,  .choreCompletion, nil, 172_800),  // dog-fed day-2
+                tx(8,  .choreCompletion, nil, 259_200)
+            ]
+        default:
+            return []
+        }
+        _ = sentinel
+    }
+
+    /// Convenience: balance for a kid derived from seedTransactions.
+    public static func seedBalance(for kidId: UUID) -> Int {
+        seedTransactions(for: kidId).reduce(0) { $0 + $1.amount }
+    }
+
+    /// Active (non-fulfilled/denied) redemption requests.
+    public static var seedPendingRedemptions: [RedemptionRequest] { [] }
+
     // MARK: - Mutable in-memory state
 
     private var families: [UUID: Family] = [SeedID.family: seedFamily]

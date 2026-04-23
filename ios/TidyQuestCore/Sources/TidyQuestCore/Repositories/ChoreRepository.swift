@@ -42,6 +42,16 @@ public final class ChoreRepository: @unchecked Sendable {
         pendingApprovals = instances.filter { $0.status == .completed }
     }
 
+    /// Seed the templates list (used at DEBUG app launch).
+    public func loadSeedTemplates(_ templates: [ChoreTemplate]) {
+        self.templates = templates
+    }
+
+    /// Seed streaks. Used at DEBUG app launch for views that render streak flames.
+    public func loadSeedStreaks(_ streaks: [Streak]) {
+        self.streaks = streaks
+    }
+
     // MARK: - Template mutations
 
     public func createTemplate(_ req: CreateChoreTemplateRequest) async {

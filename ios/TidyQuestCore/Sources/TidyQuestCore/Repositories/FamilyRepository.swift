@@ -59,6 +59,20 @@ public final class FamilyRepository: @unchecked Sendable {
         }
     }
 
+    public func deleteFamily(_ req: DeleteFamilyRequest) async throws {
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
+        do {
+            try await apiClient.deleteFamily(req)
+            family = nil
+            users = []
+        } catch {
+            self.error = error
+            throw error
+        }
+    }
+
     // MARK: - User mutations
 
     public func addKid(_ req: AddKidRequest) async {
