@@ -185,12 +185,16 @@ SELECT tests.end_test('audit_log: parent cannot DELETE audit_log');
 -- ============================================================================
 SELECT tests.begin_test('audit_log: service_role can INSERT audit_log');
 SET ROLE postgres;
+-- audit_log has 6 writable columns in this INSERT (id, family_id,
+-- actor_user_id, action, target, payload). Compose target as a single text
+-- value and use a real enum member for `action`.
 INSERT INTO audit_log (id, family_id, actor_user_id, action, target, payload)
 VALUES ('e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e199',
         '11111111-1111-1111-1111-111111111111',
         '22222222-2222-2222-2222-222222222221',
-        'test_edge_fn_action', 'point_transaction',
-        gen_random_uuid(), '{}');
+        'family.create',
+        format('point_transaction:%s', gen_random_uuid()),
+        '{}');
 SELECT tests.expect_rows(
   'SELECT * FROM audit_log WHERE id = ''e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e199''',
   1
