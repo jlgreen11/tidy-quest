@@ -113,10 +113,10 @@ jobs:
       - name: Verify stack health
         run: supabase status
 
-      - name: Reset database (apply migrations + seed, deterministic)
-        # Guarantees a clean, seeded state regardless of whatever `supabase
-        # start` left behind. Default behavior runs supabase/seed.sql.
-        run: supabase db reset
+      # NOTE: `supabase start` on a fresh CI runner already applies every
+      # migration and runs supabase/seed.sql — `supabase db reset` would be
+      # redundant here and has been observed to 502 during its internal
+      # container-restart phase on GitHub-hosted runners (flake), so we skip it.
 
       - name: Ensure psql is installed
         # run_all.sh shells out to psql against 127.0.0.1:54322. Ubuntu
