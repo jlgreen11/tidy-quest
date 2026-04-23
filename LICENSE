@@ -1,0 +1,40 @@
+TidyQuest
+Copyright (c) 2026 jlgreen11. All rights reserved.
+
+This repository is made publicly visible for transparency and reference only.
+No license is granted, whether express or implied, to use, copy, modify, merge,
+publish, distribute, sublicense, or sell copies of this software or any portion
+of it, nor to create derivative works from it, in any medium, without the prior
+written permission of the copyright holder.
+
+Specifically, and without limiting the generality of the above, the following
+are NOT permitted without prior written permission:
+
+  * Commercial use of any kind.
+  * Redistribution, in source or compiled form, in whole or in part.
+  * Incorporation into another product or service.
+  * Use for model training, fine-tuning, or other machine-learning purposes.
+  * Creation of derivative works, ports, or adaptations.
+
+The following are permitted without permission:
+
+  * Viewing and reading the source code on GitHub.
+  * Forking within GitHub for the purpose of proposing contributions back to
+    this repository via pull request, subject to the same terms applying to
+    the fork. Forks must not be used for any of the restricted purposes above.
+
+Third-party dependencies referenced by the package manifests in this
+repository (Swift Package Manager's Package.swift / Package.resolved, Deno
+imports, Supabase tooling, etc.) are not distributed as part of this
+repository. They are retrieved from their original sources at build time and
+remain governed by their own licenses.
+
+The documentation files in this repository (including but not limited to
+README.md, PLAN.md, PLAN_v0.1.md, ARCHITECTURE.md, DECISIONS.md, REVIEW.md,
+TEST_PLAN.md, and files under docs/) are also reserved under this notice.
+
+THIS REPOSITORY IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+For licensing inquiries, open a GitHub issue on this repository.

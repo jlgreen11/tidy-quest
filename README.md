@@ -407,7 +407,15 @@ Full audit trail in `REVIEW.md`. Decision log in `DECISIONS.md`.
 
 ## Contact
 
-Private repo. Author: [@jlgreen11](https://github.com/jlgreen11).
+Author: [@jlgreen11](https://github.com/jlgreen11). For licensing inquiries, open a GitHub issue.
+
+## License
+
+Copyright © 2026 jlgreen11. **All rights reserved.**
+
+This repository is published publicly for transparency and reference only. It is **not** open source. No license is granted to use, copy, modify, redistribute, incorporate, train ML models on, or otherwise reuse any part of this code, documentation, or designs without prior written permission. See [LICENSE](LICENSE) for the full notice.
+
+Third-party dependencies referenced by `Package.swift` / `Package.resolved` / Deno imports are retrieved from their original sources at build time and remain governed by their own licenses; they are not distributed as part of this repository.
 
 ---
 
