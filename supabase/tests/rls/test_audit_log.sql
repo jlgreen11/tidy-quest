@@ -32,21 +32,22 @@ VALUES ('b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b221',
 ON CONFLICT (id) DO NOTHING;
 
 -- Family A audit entries (inserted by service_role during edge fn execution)
+-- Note: `target` is a single text column per schema (e.g. 'point_transaction:<uuid>').
 INSERT INTO audit_log (id, family_id, actor_user_id, action, target, payload, created_at)
 VALUES
   ('e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e101',
    '11111111-1111-1111-1111-111111111111',
    '22222222-2222-2222-2222-222222222221',
-   'point_transaction.fine', 'point_transaction',
-   '77777777-7777-7777-7777-777777777701',
+   'point_transaction.large',
+   'point_transaction:77777777-7777-7777-7777-777777777701',
    '{"amount": -5, "reason": "Rude to sibling"}',
    now() - interval '2 days'),
 
   ('e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e102',
    '11111111-1111-1111-1111-111111111111',
    '22222222-2222-2222-2222-222222222221',
-   'redemption.approve', 'redemption_request',
-   gen_random_uuid(),
+   'redemption.approve',
+   format('redemption_request:%s', gen_random_uuid()),
    '{"reward": "30 min tablet time"}',
    now() - interval '1 day'),
 
@@ -54,8 +55,8 @@ VALUES
   ('e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e103',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
    'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b221',
-   'point_transaction.fine', 'point_transaction',
-   gen_random_uuid(),
+   'point_transaction.large',
+   format('point_transaction:%s', gen_random_uuid()),
    '{"amount": -10}',
    now())
 ON CONFLICT (id) DO NOTHING;
