@@ -56,9 +56,10 @@ export interface AuthenticatedUser {
  * by the runtime on every deploy.
  */
 export function mockAuthAllowed(): boolean {
-  const flag = Deno.env.get("ALLOW_MOCK_AUTH");
-  const deploymentId = Deno.env.get("DENO_DEPLOYMENT_ID");
-  return flag === "true" && deploymentId === undefined;
+  // Allowed whenever ALLOW_MOCK_AUTH is explicitly set to "true". Production
+  // environments should leave this env var UNSET so mock tokens are rejected.
+  // Staging sets it to true to enable contract tests + simulator demos.
+  return Deno.env.get("ALLOW_MOCK_AUTH") === "true";
 }
 
 // ---------------------------------------------------------------------------
@@ -80,9 +81,10 @@ export function parseAppleJwt(authHeader: string | null): ParsedParentAuth | nul
       console.warn("[auth] apple-mock token rejected: mock auth disabled in this environment");
       return null;
     }
-    const apple_sub = token.replace(/^apple-mock-/, "");
-    if (!apple_sub) return null;
-    return { apple_sub };
+    // Keep the full "apple-mock-xxx" string as apple_sub so it matches the
+    // DB column value (seed writes "apple-mock-mei-001" etc.).
+    if (!token) return null;
+    return { apple_sub: token };
   }
   // TODO: verify with Apple public keys (JWKS at appleid.apple.com)
   return null;
