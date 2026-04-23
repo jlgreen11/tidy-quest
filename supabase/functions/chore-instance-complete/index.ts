@@ -14,7 +14,7 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { authenticateBearer, authenticateDevice, checkRateLimit } from "../_shared/auth.ts";
+import { authenticateBearer, authenticateDevice, checkRateLimit, createServiceClient } from "../_shared/auth.ts";
 import { errorResponse, internalError, validationError } from "../_shared/errors.ts";
 import { EdgeErrorCode } from "../_shared/types.ts";
 import { ChoreInstanceCompleteRequest } from "./schema.ts";
@@ -43,8 +43,8 @@ Deno.serve(async (req: Request) => {
     authMode = "device";
   }
 
-  const rl = await checkRateLimit(user.id, "chore-instance.complete", 20);
-  if (!rl.ok) return errorResponse(429, EdgeErrorCode.RateLimitExceeded, "Rate limit exceeded");
+  const rl = await checkRateLimit(createServiceClient(), user.id, "chore-instance.complete", 20, 60);
+  if (!rl.allowed) return errorResponse(429, EdgeErrorCode.RateLimitExceeded, "Rate limit exceeded");
 
   const idempotencyKey = req.headers.get("Idempotency-Key");
 

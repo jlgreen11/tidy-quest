@@ -135,9 +135,6 @@ struct NotificationsSettingsView: View {
 
     private func loadFromRepo() {
         guard let family = familyRepo.family else { return }
-        // TODO: read per-key notification prefs from family.settings once
-        // UpdateFamilyRequest exposes a settings field for jsonb merge.
-        // Quiet hours are top-level Family fields.
         quietHoursStart = parseTime(family.quietHoursStart) ?? quietHoursStart
         quietHoursEnd = parseTime(family.quietHoursEnd) ?? quietHoursEnd
 
@@ -169,10 +166,23 @@ struct NotificationsSettingsView: View {
         errorMessage = nil
         defer { isSaving = false }
 
-        // TODO: wire notification prefs into UpdateFamilyRequest once it gains a settings field.
-        // Quiet hours are not yet in UpdateFamilyRequest either.
-        // For now, call with familyId only as a connectivity smoke-test.
-        let req = UpdateFamilyRequest(familyId: family.id)
+        let settingsPayload: [String: AnyCodable] = [
+            "notif_chore_approval": AnyCodable(choreApprovalNeeded),
+            "notif_redemption_approval": AnyCodable(redemptionApprovalNeeded),
+            "notif_streak_milestones": AnyCodable(streakMilestones),
+            "notif_daily_summary": AnyCodable(dailySummary),
+            "notif_subscription_alerts": AnyCodable(subscriptionAlerts),
+            "notif_kid_chore_reminders": AnyCodable(kidChoreReminders),
+            "notif_kid_streak_reminders": AnyCodable(kidStreakReminders),
+            "notif_kid_redemption_approved": AnyCodable(kidRedemptionApproved),
+            "notif_kid_day2_reengage": AnyCodable(kidDay2Reengage),
+        ]
+        let req = UpdateFamilyRequest(
+            familyId: family.id,
+            quietHoursStart: formatTime(quietHoursStart),
+            quietHoursEnd: formatTime(quietHoursEnd),
+            settings: settingsPayload
+        )
         await familyRepo.updateFamily(req)
 
         if familyRepo.error != nil {
@@ -207,6 +217,13 @@ struct NotificationsSettingsView: View {
               let h = Int(parts[0]),
               let m = Int(parts[1]) else { return nil }
         return Calendar.current.date(bySettingHour: h, minute: m, second: 0, of: Date())
+    }
+
+    private func formatTime(_ date: Date) -> String {
+        let cal = Calendar.current
+        let h = cal.component(.hour, from: date)
+        let m = cal.component(.minute, from: date)
+        return String(format: "%02d:%02d", h, m)
     }
 }
 

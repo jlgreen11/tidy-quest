@@ -100,9 +100,6 @@ struct ChoreDefaultsSettingsView: View {
 
     private func loadFromRepo() {
         guard let family = familyRepo.family else { return }
-        // TODO: read from family.settings["default_on_miss"], ["default_requires_approval"],
-        // ["default_cutoff_time"] once UpdateFamilyRequest exposes a settings field.
-        // For now, seed from settings if the keys exist.
         if let raw = family.settings["default_on_miss"]?.value as? String,
            let policy = OnMissPolicy(rawValue: raw) {
             defaultOnMiss = policy
@@ -126,10 +123,16 @@ struct ChoreDefaultsSettingsView: View {
         errorMessage = nil
         defer { isSaving = false }
 
-        // TODO: wire full settings merge when UpdateFamilyRequest gains a settings field.
-        // For now, call updateFamily with no changes as a connectivity smoke-test; the
-        // actual chore-default values cannot be persisted until that field is added.
-        let req = UpdateFamilyRequest(familyId: family.id)
+        var settingsPayload: [String: AnyCodable] = [
+            "default_on_miss": AnyCodable(defaultOnMiss.rawValue),
+            "default_requires_approval": AnyCodable(defaultRequiresApproval),
+        ]
+        if hasCutoffTime {
+            settingsPayload["default_cutoff_time"] = AnyCodable(formatTime(defaultCutoffTime))
+        } else {
+            settingsPayload["default_cutoff_time"] = AnyCodable(nil as String?)
+        }
+        let req = UpdateFamilyRequest(familyId: family.id, settings: settingsPayload)
         await familyRepo.updateFamily(req)
 
         if familyRepo.error != nil {
@@ -152,6 +155,13 @@ struct ChoreDefaultsSettingsView: View {
               let h = Int(parts[0]),
               let m = Int(parts[1]) else { return nil }
         return Calendar.current.date(bySettingHour: h, minute: m, second: 0, of: Date())
+    }
+
+    private func formatTime(_ date: Date) -> String {
+        let cal = Calendar.current
+        let h = cal.component(.hour, from: date)
+        let m = cal.component(.minute, from: date)
+        return String(format: "%02d:%02d", h, m)
     }
 
     private var onMissPolicyDescription: String {

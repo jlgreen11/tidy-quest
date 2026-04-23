@@ -105,9 +105,21 @@ Deno.serve(async (req: Request): Promise<Response> => {
   if (data.quiet_hours_end !== undefined) updatePayload.quiet_hours_end = data.quiet_hours_end;
   if (data.leaderboard_enabled !== undefined) updatePayload.leaderboard_enabled = data.leaderboard_enabled;
   if (data.sibling_ledger_visible !== undefined) updatePayload.sibling_ledger_visible = data.sibling_ledger_visible;
+  if (data.weekly_band_target !== undefined) updatePayload.weekly_band_target = data.weekly_band_target;
   if (data.daily_deduction_cap !== undefined) updatePayload.daily_deduction_cap = data.daily_deduction_cap;
   if (data.weekly_deduction_cap !== undefined) updatePayload.weekly_deduction_cap = data.weekly_deduction_cap;
-  if (data.settings !== undefined) updatePayload.settings = data.settings;
+
+  // settings: merge-patch into existing jsonb (not replace).
+  // Fetch current settings, merge, then write back.
+  if (data.settings !== undefined) {
+    const { data: currentFamily } = await supabase
+      .from("family")
+      .select("settings")
+      .eq("id", data.family_id)
+      .single();
+    const existingSettings = (currentFamily?.settings ?? {}) as Record<string, unknown>;
+    updatePayload.settings = { ...existingSettings, ...data.settings };
+  }
 
   if (Object.keys(updatePayload).length === 0) {
     return validationError("At least one field must be provided for update");
@@ -139,6 +151,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
       sibling_ledger_visible: updatedFamily.sibling_ledger_visible,
       subscription_tier: updatedFamily.subscription_tier,
       subscription_expires_at: updatedFamily.subscription_expires_at,
+      weekly_band_target: updatedFamily.weekly_band_target ?? null,
       daily_deduction_cap: updatedFamily.daily_deduction_cap,
       weekly_deduction_cap: updatedFamily.weekly_deduction_cap,
       settings: updatedFamily.settings,

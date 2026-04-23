@@ -135,11 +135,17 @@ struct KidSettingsDetailView: View {
     }
 
     private func saveChanges() async {
-        // TODO: wire to API when updateKid is added (no updateKid endpoint exists yet).
-        // Changes are held in local @State so the UI reflects edits within the session.
         isSaving = true
         defer { isSaving = false }
-        try? await Task.sleep(for: .milliseconds(300))
+        let req = UpdateKidRequest(
+            kidUserId: kid.id,
+            displayName: displayName,
+            color: "#\(selectedColor.hex)",
+            complexityTier: complexityTier
+        )
+        // Per-kid settings (photo default, reward categories) are stored as family.settings
+        // jsonb keys and are out of scope for this request.
+        await familyRepo.updateKid(req)
     }
 }
 

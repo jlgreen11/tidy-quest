@@ -125,8 +125,6 @@ struct RewardDefaultsSettingsView: View {
 
     private func loadFromRepo() {
         guard let family = familyRepo.family else { return }
-        // TODO: read from family.settings["default_cooldown_seconds"] and
-        // ["default_auto_approve_threshold"] once UpdateFamilyRequest exposes a settings field.
         if let secs = family.settings["default_cooldown_seconds"]?.value as? Int {
             let days = max(1, secs / 86400)
             defaultCooldownDays = Double(days)
@@ -148,9 +146,11 @@ struct RewardDefaultsSettingsView: View {
         errorMessage = nil
         defer { isSaving = false }
 
-        // TODO: wire full settings merge when UpdateFamilyRequest gains a settings field.
-        // Actual cooldown/auto-approve values cannot be persisted until that field is added.
-        let req = UpdateFamilyRequest(familyId: family.id)
+        let settingsPayload: [String: AnyCodable] = [
+            "default_cooldown_seconds": AnyCodable(hasCooldown ? cooldownSeconds : 0),
+            "default_auto_approve_threshold": AnyCodable(hasAutoApprove ? Int(autoApproveThreshold) : 0),
+        ]
+        let req = UpdateFamilyRequest(familyId: family.id, settings: settingsPayload)
         await familyRepo.updateFamily(req)
 
         if familyRepo.error != nil {

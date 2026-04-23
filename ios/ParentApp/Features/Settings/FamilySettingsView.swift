@@ -145,10 +145,11 @@ struct FamilySettingsView: View {
             familyId: family.id,
             name: familyName,
             timezone: timezone,
+            dailyResetTime: formatTime(dailyResetTime),
+            quietHoursStart: formatTime(quietHoursStart),
+            quietHoursEnd: formatTime(quietHoursEnd),
             leaderboardEnabled: leaderboardEnabled,
             siblingLedgerVisible: siblingLedgerVisible
-            // TODO: wire dailyResetTime, quietHoursStart, quietHoursEnd when
-            // UpdateFamilyRequest gains those fields (currently not in the request model).
         )
         await familyRepo.updateFamily(req)
 
@@ -174,6 +175,13 @@ struct FamilySettingsView: View {
               let h = Int(parts[0]),
               let m = Int(parts[1]) else { return nil }
         return Calendar.current.date(bySettingHour: h, minute: m, second: 0, of: Date())
+    }
+
+    private func formatTime(_ date: Date) -> String {
+        let cal = Calendar.current
+        let h = cal.component(.hour, from: date)
+        let m = cal.component(.minute, from: date)
+        return String(format: "%02d:%02d", h, m)
     }
 }
 

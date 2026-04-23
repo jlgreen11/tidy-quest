@@ -38,37 +38,59 @@ public struct UpdateFamilyRequest: Codable, Sendable {
     public let familyId: UUID
     public let name: String?
     public let timezone: String?
+    public let dailyResetTime: String?          // "HH:MM"
+    public let quietHoursStart: String?         // "HH:MM"
+    public let quietHoursEnd: String?           // "HH:MM"
     public let leaderboardEnabled: Bool?
     public let siblingLedgerVisible: Bool?
+    /// Postgres int4range encoded as "[low,high)" string, e.g. "[250,500)".
+    public let weeklyBandTarget: String?
     public let dailyDeductionCap: Int?
     public let weeklyDeductionCap: Int?
+    /// Partial settings merge — keys present here are merged into the existing jsonb column.
+    public let settings: [String: AnyCodable]?
 
     public init(
         familyId: UUID,
         name: String? = nil,
         timezone: String? = nil,
+        dailyResetTime: String? = nil,
+        quietHoursStart: String? = nil,
+        quietHoursEnd: String? = nil,
         leaderboardEnabled: Bool? = nil,
         siblingLedgerVisible: Bool? = nil,
+        weeklyBandTarget: String? = nil,
         dailyDeductionCap: Int? = nil,
-        weeklyDeductionCap: Int? = nil
+        weeklyDeductionCap: Int? = nil,
+        settings: [String: AnyCodable]? = nil
     ) {
         self.familyId = familyId
         self.name = name
         self.timezone = timezone
+        self.dailyResetTime = dailyResetTime
+        self.quietHoursStart = quietHoursStart
+        self.quietHoursEnd = quietHoursEnd
         self.leaderboardEnabled = leaderboardEnabled
         self.siblingLedgerVisible = siblingLedgerVisible
+        self.weeklyBandTarget = weeklyBandTarget
         self.dailyDeductionCap = dailyDeductionCap
         self.weeklyDeductionCap = weeklyDeductionCap
+        self.settings = settings
     }
 
     enum CodingKeys: String, CodingKey {
-        case familyId            = "family_id"
+        case familyId             = "family_id"
         case name
         case timezone
-        case leaderboardEnabled  = "leaderboard_enabled"
+        case dailyResetTime       = "daily_reset_time"
+        case quietHoursStart      = "quiet_hours_start"
+        case quietHoursEnd        = "quiet_hours_end"
+        case leaderboardEnabled   = "leaderboard_enabled"
         case siblingLedgerVisible = "sibling_ledger_visible"
-        case dailyDeductionCap   = "daily_deduction_cap"
-        case weeklyDeductionCap  = "weekly_deduction_cap"
+        case weeklyBandTarget     = "weekly_band_target"
+        case dailyDeductionCap    = "daily_deduction_cap"
+        case weeklyDeductionCap   = "weekly_deduction_cap"
+        case settings
     }
 }
 

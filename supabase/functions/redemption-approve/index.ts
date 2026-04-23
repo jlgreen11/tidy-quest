@@ -18,7 +18,7 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { authenticateBearer, checkRateLimit, requireAppAttest } from "../_shared/auth.ts";
+import { authenticateBearer, checkRateLimit, requireAppAttest, createServiceClient } from "../_shared/auth.ts";
 import { errorResponse, internalError, validationError } from "../_shared/errors.ts";
 import { EdgeErrorCode } from "../_shared/types.ts";
 import { RedemptionApproveRequest } from "./schema.ts";
@@ -46,8 +46,8 @@ Deno.serve(async (req: Request) => {
     return errorResponse(403, EdgeErrorCode.Forbidden, "Only parents and caregivers can approve redemptions");
   }
 
-  const rl = await checkRateLimit(user.id, "redemption.approve", 60);
-  if (!rl.ok) return errorResponse(429, EdgeErrorCode.RateLimitExceeded, "Rate limit exceeded");
+  const rl = await checkRateLimit(createServiceClient(), user.id, "redemption.approve", 60, 60);
+  if (!rl.allowed) return errorResponse(429, EdgeErrorCode.RateLimitExceeded, "Rate limit exceeded");
 
   const idempotencyKey = req.headers.get("Idempotency-Key") ?? crypto.randomUUID();
 

@@ -183,9 +183,10 @@ struct EconomySettingsView: View {
         errorMessage = nil
         defer { isSaving = false }
 
-        // TODO: wire weeklyBandTarget when UpdateFamilyRequest gains that field.
+        let bandTarget = "[\(Int(bandLow)),\(Int(bandHigh)))"
         let req = UpdateFamilyRequest(
             familyId: family.id,
+            weeklyBandTarget: bandTarget,
             dailyDeductionCap: Int(dailyCap),
             weeklyDeductionCap: Int(weeklyCap)
         )

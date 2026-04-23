@@ -11,7 +11,7 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { authenticateBearer, checkRateLimit } from "../_shared/auth.ts";
+import { authenticateBearer, checkRateLimit, createServiceClient } from "../_shared/auth.ts";
 import { errorResponse, internalError, validationError } from "../_shared/errors.ts";
 import { EdgeErrorCode } from "../_shared/types.ts";
 import { ChoreTemplateArchiveRequest } from "./schema.ts";
@@ -29,8 +29,8 @@ Deno.serve(async (req: Request) => {
   if (!authResult.ok) return authResult.response;
   const { user } = authResult;
 
-  const rl = await checkRateLimit(user.id, "chore-template.archive", 30);
-  if (!rl.ok) return errorResponse(429, EdgeErrorCode.RateLimitExceeded, "Rate limit exceeded");
+  const rl = await checkRateLimit(createServiceClient(), user.id, "chore-template.archive", 30, 60);
+  if (!rl.allowed) return errorResponse(429, EdgeErrorCode.RateLimitExceeded, "Rate limit exceeded");
 
   let body: unknown;
   try {
