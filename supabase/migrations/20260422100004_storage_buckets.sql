@@ -83,7 +83,5 @@ WITH CHECK (
 -- ---------------------------------------------------------------------------
 -- No UPDATE policy defined. Objects are write-once from client perspective.
 
-COMMENT ON POLICY "parents_select_family_photos" ON storage.objects IS
-  'Parents and caregivers may view proof photos whose path prefix matches their family_id JWT claim.';
-COMMENT ON POLICY "kids_insert_family_photos" ON storage.objects IS
-  'Children may upload proof photos only under their own family_id path prefix. The chore-instance.complete edge function cross-validates the upload before accepting the proof.';
+
+

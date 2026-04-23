@@ -453,7 +453,7 @@ ALTER TABLE job_log ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "job_log_select_parent"
   ON job_log FOR SELECT
   TO authenticated
-  USING (tq_is_parent() AND family_id = tq_family_id());
+  USING (tq_is_parent());
 
 -- All write operations: service_role only (pg_cron jobs)
 -- No INSERT/UPDATE/DELETE policies for authenticated → denied.
@@ -535,7 +535,7 @@ BEGIN
         USING (
           tq_is_child()
           AND family_id = tq_family_id()
-          AND requester_user_id = auth.uid()
+          AND requestor_user_id = auth.uid()
         )
     $pol$;
 
@@ -547,7 +547,7 @@ BEGIN
         WITH CHECK (
           tq_is_child()
           AND family_id = tq_family_id()
-          AND requester_user_id = auth.uid()
+          AND requestor_user_id = auth.uid()
         )
     $pol$;
   END IF;
@@ -568,7 +568,14 @@ BEGIN
       CREATE POLICY "streak_select_parent"
         ON streak FOR SELECT
         TO authenticated
-        USING (tq_is_parent() AND family_id = tq_family_id())
+        USING (
+          tq_is_parent()
+          AND EXISTS (
+            SELECT 1 FROM app_user
+            WHERE app_user.id = streak.user_id
+              AND app_user.family_id = tq_family_id()
+          )
+        )
     $pol$;
 
     -- Children: SELECT own streaks; siblings if sibling_ledger_visible
@@ -578,8 +585,17 @@ BEGIN
         TO authenticated
         USING (
           tq_is_child()
-          AND family_id = tq_family_id()
-          AND (user_id = auth.uid() OR tq_sibling_ledger_visible())
+          AND (
+            user_id = auth.uid()
+            OR (
+              tq_sibling_ledger_visible()
+              AND EXISTS (
+                SELECT 1 FROM app_user
+                WHERE app_user.id = streak.user_id
+                  AND app_user.family_id = tq_family_id()
+              )
+            )
+          )
         )
     $pol$;
   END IF;

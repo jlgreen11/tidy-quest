@@ -64,6 +64,7 @@ public enum PointTxnKind: String, Codable, Sendable, Hashable, CaseIterable {
 public enum RewardCategory: String, Codable, Sendable, Hashable, CaseIterable {
     case screenTime   = "screen_time"
     case treat
+    case outing
     case privilege
     case cashOut      = "cash_out"
     case savingGoal   = "saving_goal"
