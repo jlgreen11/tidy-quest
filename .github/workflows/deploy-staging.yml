@@ -1,0 +1,60 @@
+name: Deploy — Staging
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-staging:
+    name: Deploy to tidy-quest-staging
+    runs-on: ubuntu-latest
+    environment: staging
+    # Expose token as job-level env so step-level if: conditions can check it.
+    # GitHub Actions does not allow secrets context in job-level if: conditions.
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # ── Database migrations ──────────────────────────────────────────────
+      - name: Push database migrations
+        if: ${{ env.SUPABASE_ACCESS_TOKEN != '' }}
+        run: |
+          supabase db push \
+            --project-id "${{ secrets.SUPABASE_PROJECT_ID_STAGING }}"
+
+      # ── Edge functions ───────────────────────────────────────────────────
+      # --no-verify-jwt is required: our edge functions authenticate via
+      # Apple JWTs (parseAppleJwt) and device tokens (parseDeviceToken), not
+      # Supabase-issued JWTs. Without this flag, Supabase's platform gateway
+      # rejects every request before it reaches our auth.ts — see the F4
+      # deploy-propagation finding.
+      - name: Deploy edge functions
+        if: ${{ env.SUPABASE_ACCESS_TOKEN != '' }}
+        run: |
+          supabase functions deploy \
+            --project-id "${{ secrets.SUPABASE_PROJECT_ID_STAGING }}" \
+            --no-verify-jwt
+
+      # ── Set edge function secrets ────────────────────────────────────────
+      - name: Set edge function secrets
+        if: ${{ env.SUPABASE_ACCESS_TOKEN != '' }}
+        run: |
+          supabase secrets set \
+            SUPABASE_SERVICE_ROLE_KEY="${{ secrets.SUPABASE_SERVICE_ROLE_KEY_STAGING }}" \
+            APNS_KEY_ID="${{ secrets.APNS_KEY_ID }}" \
+            APNS_TEAM_ID="${{ secrets.APNS_TEAM_ID }}" \
+            --project-id "${{ secrets.SUPABASE_PROJECT_ID_STAGING }}"
+
+# ── Required GitHub Actions secrets (set in repo Settings > Secrets > Actions) ─
+# SUPABASE_ACCESS_TOKEN             — personal access token from supabase.com/dashboard
+# SUPABASE_PROJECT_ID_STAGING       — project ref for tidy-quest-staging
+# SUPABASE_SERVICE_ROLE_KEY_STAGING — service_role key (server-only; NEVER in iOS)
+# APNS_KEY_ID                       — Apple Push Notification key ID
+# APNS_TEAM_ID                      — Apple Developer team ID

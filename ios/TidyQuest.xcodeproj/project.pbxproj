@@ -1,0 +1,1148 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02108153CB482132931DBBD1 /* SignInAppleStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA7C077D40C0C40FFB5AB33 /* SignInAppleStep.swift */; };
+		026A7F81F9DF46C0F50ED7DD /* WidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAC239F3710A5AC0BD64BC /* WidgetBundle.swift */; };
+		12E620B0ECE32668944B3F35 /* PresetPackStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8D5A54BCCFD6F6436E3603 /* PresetPackStep.swift */; };
+		1D0EEEFAA4A2048DF9CF4A7B /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0900D39C74112C6DAF1561D9 /* MeView.swift */; };
+		20ED9C8201B25A5A22673A5E /* TierTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C135DDF7CE152E47091D5 /* TierTheme.swift */; };
+		283A12B014F318449C0BE071 /* RewardCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A88445223585B924D5C76D0 /* RewardCard.swift */; };
+		29EA4E7B44B449659E4638E5 /* TidyQuestCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4706D9FBF78EB0C8B87B9B8F /* TidyQuestCore */; };
+		2D943674FFE21C4B09CFDD5D /* RewardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E60D3D1E721837CADC287 /* RewardDetailView.swift */; };
+		31360371D016062400AE1955 /* ErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA947888658EDC9BC3B15841 /* ErrorBanner.swift */; };
+		36917B4AA12C757EFF98FF64 /* StreakBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14D790C98AC58CB27D056A5 /* StreakBadge.swift */; };
+		3BEF82429E0538790A549434 /* CoParentInviteStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E68BEFD3828EBEE0F2BB426 /* CoParentInviteStep.swift */; };
+		404FE5A89C40787F82DFFFAB /* ProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751774D3954723A309CFD137 /* ProgressRing.swift */; };
+		4AB44E2CF6EC8F88F3BA2118 /* ReminderCadenceStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5292E9CD8A077A5CBCF8FE /* ReminderCadenceStep.swift */; };
+		4E5DD47B40F368BFE495A6C5 /* FamilyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D347A3D172478043A52172 /* FamilyView.swift */; };
+		51B04F0571BA24237ABB5CA9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149678782C71C52D579928CB /* HomeView.swift */; };
+		51FC022C37699600F9D8AC3B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964FF37335BB6F620DCA226D /* EmptyStateView.swift */; };
+		558D1F470764308EBE08FC69 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B6968060B7B7918B2D9B3C /* TodayView.swift */; };
+		595F19259CD982074B373896 /* FineBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58342C8ED7B2D0257A091A9E /* FineBottomSheet.swift */; };
+		5B9D5E98F6B8D1AB1D3858C0 /* TidyQuestKidApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B290F6C3F71F57613E3A7151 /* TidyQuestKidApp.swift */; };
+		61941543121F35AD95C14769 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CF590ADBDE7C0EDADCA6D3 /* OnboardingFlow.swift */; };
+		624504AB3FDEE36AFE43356B /* PairDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C59CE52CE2AF31151359F94 /* PairDeviceView.swift */; };
+		63CC5A5338F9D605A97EE142 /* ParentRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFEEB2AAD5357E33A5A8A6C /* ParentRootView.swift */; };
+		6452C49D1FB197FCB11A6A42 /* RewardDefaultsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB05587946E9E01E8179599B /* RewardDefaultsSettingsView.swift */; };
+		651078E82309F85E36D264AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B0F9C2F91A6E8C73F47E7 /* SettingsView.swift */; };
+		6D47EAEDF80AFE0063F52F22 /* LoadingSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59FBB44093F425BF566D25E /* LoadingSkeleton.swift */; };
+		6DA8425EA0D1DB423C25CE4F /* ChoreEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E5F9A5B3C2359FBAAEA201 /* ChoreEditorView.swift */; };
+		77E297DB54C1283A85C578A6 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF890449521BABF08A9AFA5E /* HapticFeedback.swift */; };
+		7A791125777E25E09412302B /* EconomySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5068C4432FF75A41541CCC /* EconomySettingsView.swift */; };
+		8523916368BC3A9B828284DE /* KidSettingsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5464719B17A59162ACB9E0 /* KidSettingsDetailView.swift */; };
+		858701E144CECE16BAE6570C /* QuestDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945DD0E8D8C173F5F3B1B66A /* QuestDetailView.swift */; };
+		8E9DCFE780D617072CBE377A /* SavingGoalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE69A048B262F1523FB920A /* SavingGoalCard.swift */; };
+		926E4BDAAFD9F8D5F6716019 /* KidAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3158E7B4DA1E406C2A91D65 /* KidAvatar.swift */; };
+		9307554C6E4E726C3AEC6116 /* ApprovalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5B8E0397D30325598F3D3D /* ApprovalsView.swift */; };
+		94B2EB3C79D6074817788005 /* TierAwareTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EB2CDEEF4C4AA7D1331044 /* TierAwareTile.swift */; };
+		9FB855D641611D7C0680FAFE /* ApprovalRowCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644C61749099043F0E564057 /* ApprovalRowCard.swift */; };
+		9FDED8160695FD196F3AB895 /* AccountSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54D3288A3B00759E1CE23AF /* AccountSettingsView.swift */; };
+		A336D95BDD59BC095ABC911B /* QuestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E6518E617251C304F72C21 /* QuestsView.swift */; };
+		A57BA6495E7C2316A910986C /* ChoreDefaultsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABD9E20DF1F8AD3598F7C62 /* ChoreDefaultsSettingsView.swift */; };
+		A5BDDE1D457C3F03274FB0B4 /* PairKidDeviceStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41467E1EAAC85482DFE1E2F2 /* PairKidDeviceStep.swift */; };
+		AA83687FC367774CC4C2184D /* KidDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B6A0620218C53AECE19341 /* KidDetailView.swift */; };
+		AC81C108DBDB176088552350 /* ChoreTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42319833D5B725D5436C463 /* ChoreTile.swift */; };
+		B1DA00B759FEAB201E3D905F /* PrivacySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76009A0FF3D04A791AC7646D /* PrivacySettingsView.swift */; };
+		B5EAEDA0E7560DC6D5AD8AF2 /* StreakDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A3956DD9AE55307E762299 /* StreakDetailView.swift */; };
+		B6E586F60E41882F329917BB /* PhotoProofCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC345AC965B6FEB703DF09 /* PhotoProofCaptureView.swift */; };
+		BF839EBC3DB813F31537CF08 /* FamilySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B102CD19E4EFBEC0A222F2C0 /* FamilySettingsView.swift */; };
+		C31F074C1253856DBF1B83D7 /* TidyQuestCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5C344E26A3BAD27117B705A8 /* TidyQuestCore */; };
+		C355D44C1612751D78D28ED3 /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D23CCB821A7C22043B43E0 /* RewardsView.swift */; };
+		C3FF25B6144FEC43AA57C175 /* ReviewChoresStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE179565900818E7EFA1B850 /* ReviewChoresStep.swift */; };
+		C66BAA5D28730BE087AC70DD /* TidyQuestCore in Frameworks */ = {isa = PBXBuildFile; productRef = 70E9E174B3F66F0B7D12A652 /* TidyQuestCore */; };
+		C6C3E804E0B32A495061F864 /* KidsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0941AECA4BECD941DC64DE95 /* KidsSettingsView.swift */; };
+		C83CBDC99FC253CB71AEF320 /* AddFirstKidStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10006A24FAC6C27D02998D91 /* AddFirstKidStep.swift */; };
+		CF1D5CBC2D327C768C6A51C2 /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093816CB3A8658E92F55E5DD /* NotificationsSettingsView.swift */; };
+		D2827F6A34F1BC14233D5AA6 /* JarProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9403DB9A28C7C57E1947E /* JarProgressView.swift */; };
+		D99703CC65EC036A33F7AE04 /* EconomyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EAD9F72C38B242207A731B /* EconomyView.swift */; };
+		DD100FE300B7727CED75721E /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E887AA1EE15D871C2A048FB3 /* ConfettiView.swift */; };
+		EC8710B82FDE3077D6EE6B15 /* WelcomeStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD490468808247EA36203AF9 /* WelcomeStep.swift */; };
+		EF6273A5A86B74A578FE99D2 /* SubscriptionGateStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E898BDB062D4F372FC71A /* SubscriptionGateStep.swift */; };
+		F2173F92EF7CCD2EFC0756A1 /* KidRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524FFEBACDA5A919C5F689B /* KidRootView.swift */; };
+		F21F84E5F95C860D1A8932A3 /* BalancePill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494878BC5496D6718C45D864 /* BalancePill.swift */; };
+		F2C114F4CC8E4FF0C4744511 /* LedgerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6150620B17B8031437B494A /* LedgerView.swift */; };
+		F78452AFD134B3B05CB92B98 /* TidyQuestParentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B53985B3690829391586B57 /* TidyQuestParentApp.swift */; };
+		F94EE850D1D3018BDA387D2D /* OnboardingCompleteStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277C73C2610EC1314911815B /* OnboardingCompleteStep.swift */; };
+		FB2CD8C37A59B629124555F4 /* RewardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77CEE4FFD715961F6718E /* RewardEditorView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0900D39C74112C6DAF1561D9 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+		093816CB3A8658E92F55E5DD /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
+		0941AECA4BECD941DC64DE95 /* KidsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidsSettingsView.swift; sourceTree = "<group>"; };
+		10006A24FAC6C27D02998D91 /* AddFirstKidStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFirstKidStep.swift; sourceTree = "<group>"; };
+		149678782C71C52D579928CB /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		1A2E898BDB062D4F372FC71A /* SubscriptionGateStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionGateStep.swift; sourceTree = "<group>"; };
+		1C59CE52CE2AF31151359F94 /* PairDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairDeviceView.swift; sourceTree = "<group>"; };
+		1FF90EAA18CAE0353E61E105 /* TidyQuestCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TidyQuestCore; path = TidyQuestCore; sourceTree = SOURCE_ROOT; };
+		21E77CEE4FFD715961F6718E /* RewardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardEditorView.swift; sourceTree = "<group>"; };
+		24E6518E617251C304F72C21 /* QuestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestsView.swift; sourceTree = "<group>"; };
+		253B0F3A585C71BCEC42B21C /* ParentApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ParentApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		277C73C2610EC1314911815B /* OnboardingCompleteStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCompleteStep.swift; sourceTree = "<group>"; };
+		2A8D5A54BCCFD6F6436E3603 /* PresetPackStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetPackStep.swift; sourceTree = "<group>"; };
+		2ABD9E20DF1F8AD3598F7C62 /* ChoreDefaultsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreDefaultsSettingsView.swift; sourceTree = "<group>"; };
+		397E60D3D1E721837CADC287 /* RewardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardDetailView.swift; sourceTree = "<group>"; };
+		3A88445223585B924D5C76D0 /* RewardCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCard.swift; sourceTree = "<group>"; };
+		41467E1EAAC85482DFE1E2F2 /* PairKidDeviceStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairKidDeviceStep.swift; sourceTree = "<group>"; };
+		48EAD9F72C38B242207A731B /* EconomyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomyView.swift; sourceTree = "<group>"; };
+		494878BC5496D6718C45D864 /* BalancePill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancePill.swift; sourceTree = "<group>"; };
+		4A7B0F9C2F91A6E8C73F47E7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		4B5292E9CD8A077A5CBCF8FE /* ReminderCadenceStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCadenceStep.swift; sourceTree = "<group>"; };
+		4B7C135DDF7CE152E47091D5 /* TierTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TierTheme.swift; sourceTree = "<group>"; };
+		58342C8ED7B2D0257A091A9E /* FineBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FineBottomSheet.swift; sourceTree = "<group>"; };
+		644C61749099043F0E564057 /* ApprovalRowCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalRowCard.swift; sourceTree = "<group>"; };
+		69D23CCB821A7C22043B43E0 /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
+		6E68BEFD3828EBEE0F2BB426 /* CoParentInviteStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoParentInviteStep.swift; sourceTree = "<group>"; };
+		751774D3954723A309CFD137 /* ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRing.swift; sourceTree = "<group>"; };
+		76009A0FF3D04A791AC7646D /* PrivacySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsView.swift; sourceTree = "<group>"; };
+		7CE69A048B262F1523FB920A /* SavingGoalCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingGoalCard.swift; sourceTree = "<group>"; };
+		80B6968060B7B7918B2D9B3C /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		80FC345AC965B6FEB703DF09 /* PhotoProofCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoProofCaptureView.swift; sourceTree = "<group>"; };
+		8664CB8054D0A067B362490C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8B53985B3690829391586B57 /* TidyQuestParentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TidyQuestParentApp.swift; sourceTree = "<group>"; };
+		92EB2CDEEF4C4AA7D1331044 /* TierAwareTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TierAwareTile.swift; sourceTree = "<group>"; };
+		945DD0E8D8C173F5F3B1B66A /* QuestDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestDetailView.swift; sourceTree = "<group>"; };
+		95096C42F147338C16970DC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		964FF37335BB6F620DCA226D /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		A54D3288A3B00759E1CE23AF /* AccountSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingsView.swift; sourceTree = "<group>"; };
+		A59FBB44093F425BF566D25E /* LoadingSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSkeleton.swift; sourceTree = "<group>"; };
+		A9A3956DD9AE55307E762299 /* StreakDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakDetailView.swift; sourceTree = "<group>"; };
+		AD490468808247EA36203AF9 /* WelcomeStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeStep.swift; sourceTree = "<group>"; };
+		AEF6AE3BB4C228AAA5328172 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AF5068C4432FF75A41541CCC /* EconomySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EconomySettingsView.swift; sourceTree = "<group>"; };
+		B0C48EC20099DECBFEC5E224 /* KidApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KidApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B102CD19E4EFBEC0A222F2C0 /* FamilySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilySettingsView.swift; sourceTree = "<group>"; };
+		B2871E545BFB8EB7A17F80FB /* WidgetBundle.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = WidgetBundle.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B290F6C3F71F57613E3A7151 /* TidyQuestKidApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TidyQuestKidApp.swift; sourceTree = "<group>"; };
+		BB05587946E9E01E8179599B /* RewardDefaultsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardDefaultsSettingsView.swift; sourceTree = "<group>"; };
+		BF890449521BABF08A9AFA5E /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
+		C6150620B17B8031437B494A /* LedgerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgerView.swift; sourceTree = "<group>"; };
+		C8B6A0620218C53AECE19341 /* KidDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidDetailView.swift; sourceTree = "<group>"; };
+		C8E9403DB9A28C7C57E1947E /* JarProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarProgressView.swift; sourceTree = "<group>"; };
+		CBFEEB2AAD5357E33A5A8A6C /* ParentRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentRootView.swift; sourceTree = "<group>"; };
+		D3158E7B4DA1E406C2A91D65 /* KidAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidAvatar.swift; sourceTree = "<group>"; };
+		D42319833D5B725D5436C463 /* ChoreTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreTile.swift; sourceTree = "<group>"; };
+		D6E5F9A5B3C2359FBAAEA201 /* ChoreEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreEditorView.swift; sourceTree = "<group>"; };
+		DC5464719B17A59162ACB9E0 /* KidSettingsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidSettingsDetailView.swift; sourceTree = "<group>"; };
+		DD5B8E0397D30325598F3D3D /* ApprovalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsView.swift; sourceTree = "<group>"; };
+		DFA7C077D40C0C40FFB5AB33 /* SignInAppleStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAppleStep.swift; sourceTree = "<group>"; };
+		E14D790C98AC58CB27D056A5 /* StreakBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakBadge.swift; sourceTree = "<group>"; };
+		E3D347A3D172478043A52172 /* FamilyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyView.swift; sourceTree = "<group>"; };
+		E524FFEBACDA5A919C5F689B /* KidRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidRootView.swift; sourceTree = "<group>"; };
+		E887AA1EE15D871C2A048FB3 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
+		EA947888658EDC9BC3B15841 /* ErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorBanner.swift; sourceTree = "<group>"; };
+		F3EAC239F3710A5AC0BD64BC /* WidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetBundle.swift; sourceTree = "<group>"; };
+		F4CF590ADBDE7C0EDADCA6D3 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
+		FE179565900818E7EFA1B850 /* ReviewChoresStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewChoresStep.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		90C95D9C9347AD600A29A1CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C31F074C1253856DBF1B83D7 /* TidyQuestCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5B24D38C401444E24CCE5CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29EA4E7B44B449659E4638E5 /* TidyQuestCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3AF0992C6153B5C323E8FC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C66BAA5D28730BE087AC70DD /* TidyQuestCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		17AB8DDB2E406C2F8C9CEB2F /* Approvals */ = {
+			isa = PBXGroup;
+			children = (
+				DD5B8E0397D30325598F3D3D /* ApprovalsView.swift */,
+			);
+			path = Approvals;
+			sourceTree = "<group>";
+		};
+		246356612CBAE27ED65AC0E7 /* Economy */ = {
+			isa = PBXGroup;
+			children = (
+				48EAD9F72C38B242207A731B /* EconomyView.swift */,
+				A9A3956DD9AE55307E762299 /* StreakDetailView.swift */,
+			);
+			path = Economy;
+			sourceTree = "<group>";
+		};
+		3D067FF8F5EED76D1F56DFE3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E524FFEBACDA5A919C5F689B /* KidRootView.swift */,
+				B290F6C3F71F57613E3A7151 /* TidyQuestKidApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		44627378B87A12CE8A436EAB = {
+			isa = PBXGroup;
+			children = (
+				B82E47BCA2026AFF55E56113 /* KidApp */,
+				7B1386723B2305347B877903 /* Packages */,
+				62B2825CDB73BF3033D16C16 /* ParentApp */,
+				45CA58A278E52DC1F0588D1F /* WidgetBundle */,
+				549C5EAEBAC4D6907EA341DE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		45CA58A278E52DC1F0588D1F /* WidgetBundle */ = {
+			isa = PBXGroup;
+			children = (
+				AEF6AE3BB4C228AAA5328172 /* Info.plist */,
+				F3EAC239F3710A5AC0BD64BC /* WidgetBundle.swift */,
+			);
+			path = WidgetBundle;
+			sourceTree = "<group>";
+		};
+		549C5EAEBAC4D6907EA341DE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0C48EC20099DECBFEC5E224 /* KidApp.app */,
+				253B0F3A585C71BCEC42B21C /* ParentApp.app */,
+				B2871E545BFB8EB7A17F80FB /* WidgetBundle.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5FFDF66B65F0854FB20DD5AE /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				644C61749099043F0E564057 /* ApprovalRowCard.swift */,
+				494878BC5496D6718C45D864 /* BalancePill.swift */,
+				964FF37335BB6F620DCA226D /* EmptyStateView.swift */,
+				EA947888658EDC9BC3B15841 /* ErrorBanner.swift */,
+				D3158E7B4DA1E406C2A91D65 /* KidAvatar.swift */,
+				A59FBB44093F425BF566D25E /* LoadingSkeleton.swift */,
+				751774D3954723A309CFD137 /* ProgressRing.swift */,
+				92EB2CDEEF4C4AA7D1331044 /* TierAwareTile.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		62B2825CDB73BF3033D16C16 /* ParentApp */ = {
+			isa = PBXGroup;
+			children = (
+				984F9E0ED34F6F4B46DFA525 /* App */,
+				7D7CAF09768122DE26A27757 /* Features */,
+				5FFDF66B65F0854FB20DD5AE /* Shared */,
+				95096C42F147338C16970DC1 /* Info.plist */,
+			);
+			path = ParentApp;
+			sourceTree = "<group>";
+		};
+		7B1386723B2305347B877903 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				1FF90EAA18CAE0353E61E105 /* TidyQuestCore */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		7D7CAF09768122DE26A27757 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				17AB8DDB2E406C2F8C9CEB2F /* Approvals */,
+				246356612CBAE27ED65AC0E7 /* Economy */,
+				E453F55096E64C38D18D622D /* Family */,
+				F2C9C8A7362E4CC2F0D6508A /* Onboarding */,
+				C024F5C44BB8C949867E4036 /* Settings */,
+				A8D0755907F7F1D86D49B822 /* Today */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		892D0BA667F43A758030A722 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				149678782C71C52D579928CB /* HomeView.swift */,
+				80FC345AC965B6FEB703DF09 /* PhotoProofCaptureView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		984F9E0ED34F6F4B46DFA525 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				CBFEEB2AAD5357E33A5A8A6C /* ParentRootView.swift */,
+				8B53985B3690829391586B57 /* TidyQuestParentApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		9906235D17864361E4E7EC7B /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				D42319833D5B725D5436C463 /* ChoreTile.swift */,
+				E887AA1EE15D871C2A048FB3 /* ConfettiView.swift */,
+				58342C8ED7B2D0257A091A9E /* FineBottomSheet.swift */,
+				BF890449521BABF08A9AFA5E /* HapticFeedback.swift */,
+				C8E9403DB9A28C7C57E1947E /* JarProgressView.swift */,
+				3A88445223585B924D5C76D0 /* RewardCard.swift */,
+				7CE69A048B262F1523FB920A /* SavingGoalCard.swift */,
+				E14D790C98AC58CB27D056A5 /* StreakBadge.swift */,
+				4B7C135DDF7CE152E47091D5 /* TierTheme.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		A8D0755907F7F1D86D49B822 /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				80B6968060B7B7918B2D9B3C /* TodayView.swift */,
+			);
+			path = Today;
+			sourceTree = "<group>";
+		};
+		B82E47BCA2026AFF55E56113 /* KidApp */ = {
+			isa = PBXGroup;
+			children = (
+				3D067FF8F5EED76D1F56DFE3 /* App */,
+				BE198CDF2C59BFAAAB6163A5 /* Features */,
+				9906235D17864361E4E7EC7B /* Shared */,
+				8664CB8054D0A067B362490C /* Info.plist */,
+			);
+			path = KidApp;
+			sourceTree = "<group>";
+		};
+		BE198CDF2C59BFAAAB6163A5 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				892D0BA667F43A758030A722 /* Home */,
+				EC9A30AF79BDD659F91D537D /* Me */,
+				EFDC70C6B1502CFC7C089FC7 /* Onboarding */,
+				FF7904BD5F5D01F9EB3B9ABF /* Quests */,
+				D536E43924B86A6B9ADAFC15 /* Rewards */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		C024F5C44BB8C949867E4036 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A54D3288A3B00759E1CE23AF /* AccountSettingsView.swift */,
+				2ABD9E20DF1F8AD3598F7C62 /* ChoreDefaultsSettingsView.swift */,
+				AF5068C4432FF75A41541CCC /* EconomySettingsView.swift */,
+				B102CD19E4EFBEC0A222F2C0 /* FamilySettingsView.swift */,
+				DC5464719B17A59162ACB9E0 /* KidSettingsDetailView.swift */,
+				0941AECA4BECD941DC64DE95 /* KidsSettingsView.swift */,
+				093816CB3A8658E92F55E5DD /* NotificationsSettingsView.swift */,
+				76009A0FF3D04A791AC7646D /* PrivacySettingsView.swift */,
+				BB05587946E9E01E8179599B /* RewardDefaultsSettingsView.swift */,
+				4A7B0F9C2F91A6E8C73F47E7 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		D536E43924B86A6B9ADAFC15 /* Rewards */ = {
+			isa = PBXGroup;
+			children = (
+				397E60D3D1E721837CADC287 /* RewardDetailView.swift */,
+				69D23CCB821A7C22043B43E0 /* RewardsView.swift */,
+			);
+			path = Rewards;
+			sourceTree = "<group>";
+		};
+		E453F55096E64C38D18D622D /* Family */ = {
+			isa = PBXGroup;
+			children = (
+				D6E5F9A5B3C2359FBAAEA201 /* ChoreEditorView.swift */,
+				E3D347A3D172478043A52172 /* FamilyView.swift */,
+				C8B6A0620218C53AECE19341 /* KidDetailView.swift */,
+				21E77CEE4FFD715961F6718E /* RewardEditorView.swift */,
+			);
+			path = Family;
+			sourceTree = "<group>";
+		};
+		EC9A30AF79BDD659F91D537D /* Me */ = {
+			isa = PBXGroup;
+			children = (
+				C6150620B17B8031437B494A /* LedgerView.swift */,
+				0900D39C74112C6DAF1561D9 /* MeView.swift */,
+			);
+			path = Me;
+			sourceTree = "<group>";
+		};
+		EFDC70C6B1502CFC7C089FC7 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				1C59CE52CE2AF31151359F94 /* PairDeviceView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		F2C9C8A7362E4CC2F0D6508A /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				10006A24FAC6C27D02998D91 /* AddFirstKidStep.swift */,
+				6E68BEFD3828EBEE0F2BB426 /* CoParentInviteStep.swift */,
+				277C73C2610EC1314911815B /* OnboardingCompleteStep.swift */,
+				F4CF590ADBDE7C0EDADCA6D3 /* OnboardingFlow.swift */,
+				41467E1EAAC85482DFE1E2F2 /* PairKidDeviceStep.swift */,
+				2A8D5A54BCCFD6F6436E3603 /* PresetPackStep.swift */,
+				4B5292E9CD8A077A5CBCF8FE /* ReminderCadenceStep.swift */,
+				FE179565900818E7EFA1B850 /* ReviewChoresStep.swift */,
+				DFA7C077D40C0C40FFB5AB33 /* SignInAppleStep.swift */,
+				1A2E898BDB062D4F372FC71A /* SubscriptionGateStep.swift */,
+				AD490468808247EA36203AF9 /* WelcomeStep.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		FF7904BD5F5D01F9EB3B9ABF /* Quests */ = {
+			isa = PBXGroup;
+			children = (
+				945DD0E8D8C173F5F3B1B66A /* QuestDetailView.swift */,
+				24E6518E617251C304F72C21 /* QuestsView.swift */,
+			);
+			path = Quests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4DC7523C38CFC14352619CA8 /* ParentApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A092251DE93204DAA822DC08 /* Build configuration list for PBXNativeTarget "ParentApp" */;
+			buildPhases = (
+				38B9BBE45D66CAF5E409DA44 /* Sources */,
+				90C95D9C9347AD600A29A1CA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ParentApp;
+			packageProductDependencies = (
+				5C344E26A3BAD27117B705A8 /* TidyQuestCore */,
+			);
+			productName = ParentApp;
+			productReference = 253B0F3A585C71BCEC42B21C /* ParentApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		547CC2DA2BAB9AA354EE566B /* WidgetBundle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 68A6ED4549506E7922AA0C40 /* Build configuration list for PBXNativeTarget "WidgetBundle" */;
+			buildPhases = (
+				732C5140C00B821042F6BB1D /* Sources */,
+				E5B24D38C401444E24CCE5CA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WidgetBundle;
+			packageProductDependencies = (
+				4706D9FBF78EB0C8B87B9B8F /* TidyQuestCore */,
+			);
+			productName = WidgetBundle;
+			productReference = B2871E545BFB8EB7A17F80FB /* WidgetBundle.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		7512C72888BF2303DEBFCF3E /* KidApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7EB7C9FB19D32E2658330AEB /* Build configuration list for PBXNativeTarget "KidApp" */;
+			buildPhases = (
+				9818D0C93D848413AA3F2EFE /* Sources */,
+				F3AF0992C6153B5C323E8FC4 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KidApp;
+			packageProductDependencies = (
+				70E9E174B3F66F0B7D12A652 /* TidyQuestCore */,
+			);
+			productName = KidApp;
+			productReference = B0C48EC20099DECBFEC5E224 /* KidApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9BC76934E84BA69EF82EB8C3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					4DC7523C38CFC14352619CA8 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					547CC2DA2BAB9AA354EE566B = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					7512C72888BF2303DEBFCF3E = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A5E8D8C36E629855FDAF0D1E /* Build configuration list for PBXProject "TidyQuest" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 44627378B87A12CE8A436EAB;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FDB92A5EC54BE402EE56A708 /* XCLocalSwiftPackageReference "TidyQuestCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 549C5EAEBAC4D6907EA341DE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7512C72888BF2303DEBFCF3E /* KidApp */,
+				4DC7523C38CFC14352619CA8 /* ParentApp */,
+				547CC2DA2BAB9AA354EE566B /* WidgetBundle */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		38B9BBE45D66CAF5E409DA44 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9FDED8160695FD196F3AB895 /* AccountSettingsView.swift in Sources */,
+				C83CBDC99FC253CB71AEF320 /* AddFirstKidStep.swift in Sources */,
+				9FB855D641611D7C0680FAFE /* ApprovalRowCard.swift in Sources */,
+				9307554C6E4E726C3AEC6116 /* ApprovalsView.swift in Sources */,
+				F21F84E5F95C860D1A8932A3 /* BalancePill.swift in Sources */,
+				A57BA6495E7C2316A910986C /* ChoreDefaultsSettingsView.swift in Sources */,
+				6DA8425EA0D1DB423C25CE4F /* ChoreEditorView.swift in Sources */,
+				3BEF82429E0538790A549434 /* CoParentInviteStep.swift in Sources */,
+				7A791125777E25E09412302B /* EconomySettingsView.swift in Sources */,
+				D99703CC65EC036A33F7AE04 /* EconomyView.swift in Sources */,
+				51FC022C37699600F9D8AC3B /* EmptyStateView.swift in Sources */,
+				31360371D016062400AE1955 /* ErrorBanner.swift in Sources */,
+				BF839EBC3DB813F31537CF08 /* FamilySettingsView.swift in Sources */,
+				4E5DD47B40F368BFE495A6C5 /* FamilyView.swift in Sources */,
+				926E4BDAAFD9F8D5F6716019 /* KidAvatar.swift in Sources */,
+				AA83687FC367774CC4C2184D /* KidDetailView.swift in Sources */,
+				8523916368BC3A9B828284DE /* KidSettingsDetailView.swift in Sources */,
+				C6C3E804E0B32A495061F864 /* KidsSettingsView.swift in Sources */,
+				6D47EAEDF80AFE0063F52F22 /* LoadingSkeleton.swift in Sources */,
+				CF1D5CBC2D327C768C6A51C2 /* NotificationsSettingsView.swift in Sources */,
+				F94EE850D1D3018BDA387D2D /* OnboardingCompleteStep.swift in Sources */,
+				61941543121F35AD95C14769 /* OnboardingFlow.swift in Sources */,
+				A5BDDE1D457C3F03274FB0B4 /* PairKidDeviceStep.swift in Sources */,
+				63CC5A5338F9D605A97EE142 /* ParentRootView.swift in Sources */,
+				12E620B0ECE32668944B3F35 /* PresetPackStep.swift in Sources */,
+				B1DA00B759FEAB201E3D905F /* PrivacySettingsView.swift in Sources */,
+				404FE5A89C40787F82DFFFAB /* ProgressRing.swift in Sources */,
+				4AB44E2CF6EC8F88F3BA2118 /* ReminderCadenceStep.swift in Sources */,
+				C3FF25B6144FEC43AA57C175 /* ReviewChoresStep.swift in Sources */,
+				6452C49D1FB197FCB11A6A42 /* RewardDefaultsSettingsView.swift in Sources */,
+				FB2CD8C37A59B629124555F4 /* RewardEditorView.swift in Sources */,
+				651078E82309F85E36D264AB /* SettingsView.swift in Sources */,
+				02108153CB482132931DBBD1 /* SignInAppleStep.swift in Sources */,
+				B5EAEDA0E7560DC6D5AD8AF2 /* StreakDetailView.swift in Sources */,
+				EF6273A5A86B74A578FE99D2 /* SubscriptionGateStep.swift in Sources */,
+				F78452AFD134B3B05CB92B98 /* TidyQuestParentApp.swift in Sources */,
+				94B2EB3C79D6074817788005 /* TierAwareTile.swift in Sources */,
+				558D1F470764308EBE08FC69 /* TodayView.swift in Sources */,
+				EC8710B82FDE3077D6EE6B15 /* WelcomeStep.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		732C5140C00B821042F6BB1D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				026A7F81F9DF46C0F50ED7DD /* WidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9818D0C93D848413AA3F2EFE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC81C108DBDB176088552350 /* ChoreTile.swift in Sources */,
+				DD100FE300B7727CED75721E /* ConfettiView.swift in Sources */,
+				595F19259CD982074B373896 /* FineBottomSheet.swift in Sources */,
+				77E297DB54C1283A85C578A6 /* HapticFeedback.swift in Sources */,
+				51B04F0571BA24237ABB5CA9 /* HomeView.swift in Sources */,
+				D2827F6A34F1BC14233D5AA6 /* JarProgressView.swift in Sources */,
+				F2173F92EF7CCD2EFC0756A1 /* KidRootView.swift in Sources */,
+				F2C114F4CC8E4FF0C4744511 /* LedgerView.swift in Sources */,
+				1D0EEEFAA4A2048DF9CF4A7B /* MeView.swift in Sources */,
+				624504AB3FDEE36AFE43356B /* PairDeviceView.swift in Sources */,
+				B6E586F60E41882F329917BB /* PhotoProofCaptureView.swift in Sources */,
+				858701E144CECE16BAE6570C /* QuestDetailView.swift in Sources */,
+				A336D95BDD59BC095ABC911B /* QuestsView.swift in Sources */,
+				283A12B014F318449C0BE071 /* RewardCard.swift in Sources */,
+				2D943674FFE21C4B09CFDD5D /* RewardDetailView.swift in Sources */,
+				C355D44C1612751D78D28ED3 /* RewardsView.swift in Sources */,
+				8E9DCFE780D617072CBE377A /* SavingGoalCard.swift in Sources */,
+				36917B4AA12C757EFF98FF64 /* StreakBadge.swift in Sources */,
+				5B9D5E98F6B8D1AB1D3858C0 /* TidyQuestKidApp.swift in Sources */,
+				20ED9C8201B25A5A22673A5E /* TierTheme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		01DB53B48CC7D09667DB48A7 /* Release-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = ParentApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.parent;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XCCONFIG_FILE = "Config/ParentApp-Prod.xcconfig";
+			};
+			name = "Release-Prod";
+		};
+		0345A784283AC4E3C2958D87 /* Release-Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = ParentApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.parent;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XCCONFIG_FILE = "Config/ParentApp-Staging.xcconfig";
+			};
+			name = "Release-Staging";
+		};
+		0F3F1221632B90510AA8E624 /* Debug-Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = KidApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.kid;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XCCONFIG_FILE = "Config/KidApp-Staging.xcconfig";
+			};
+			name = "Debug-Staging";
+		};
+		0FC3B75682D40373EB24AAB7 /* Debug-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = WidgetBundle/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.widgets;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-Prod";
+		};
+		169DE67C40CFF7687B029A51 /* Debug-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = ParentApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.parent;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XCCONFIG_FILE = "Config/ParentApp-Prod.xcconfig";
+			};
+			name = "Debug-Prod";
+		};
+		1938555F61143683B4A56590 /* Release-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = "Release-Prod";
+		};
+		19479103CE55A73D31356A9B /* Debug-Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = ParentApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.parent;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XCCONFIG_FILE = "Config/ParentApp-Staging.xcconfig";
+			};
+			name = "Debug-Staging";
+		};
+		1D50F455970DD7E7127308C8 /* Debug-Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = WidgetBundle/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.widgets;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-Staging";
+		};
+		4FCF7F46EA2CE0AA57FCF2EF /* Debug-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = "Debug-Prod";
+		};
+		5270AB631BCB58CA10EBA09C /* Release-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = WidgetBundle/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.widgets;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Release-Prod";
+		};
+		5AB3DED809077ED5BDAF300C /* Debug-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = KidApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.kid;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XCCONFIG_FILE = "Config/KidApp-Prod.xcconfig";
+			};
+			name = "Debug-Prod";
+		};
+		7A7731EEF0D99F8D6483D94B /* Release-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = KidApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.kid;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XCCONFIG_FILE = "Config/KidApp-Prod.xcconfig";
+			};
+			name = "Release-Prod";
+		};
+		88FF7B055CD2E1C473BA6024 /* Release-Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = KidApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.kid;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XCCONFIG_FILE = "Config/KidApp-Staging.xcconfig";
+			};
+			name = "Release-Staging";
+		};
+		8987AFE2AD5C9E5EBB937B44 /* Release-Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = "Release-Staging";
+		};
+		CA3CBFCF22B0106AFA515795 /* Debug-Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = "Debug-Staging";
+		};
+		CEC7D45AC447547D39443F2E /* Release-Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = WidgetBundle/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlgreen11.tidyquest.widgets;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Release-Staging";
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		68A6ED4549506E7922AA0C40 /* Build configuration list for PBXNativeTarget "WidgetBundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FC3B75682D40373EB24AAB7 /* Debug-Prod */,
+				1D50F455970DD7E7127308C8 /* Debug-Staging */,
+				5270AB631BCB58CA10EBA09C /* Release-Prod */,
+				CEC7D45AC447547D39443F2E /* Release-Staging */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug-Prod";
+		};
+		7EB7C9FB19D32E2658330AEB /* Build configuration list for PBXNativeTarget "KidApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5AB3DED809077ED5BDAF300C /* Debug-Prod */,
+				0F3F1221632B90510AA8E624 /* Debug-Staging */,
+				7A7731EEF0D99F8D6483D94B /* Release-Prod */,
+				88FF7B055CD2E1C473BA6024 /* Release-Staging */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug-Prod";
+		};
+		A092251DE93204DAA822DC08 /* Build configuration list for PBXNativeTarget "ParentApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				169DE67C40CFF7687B029A51 /* Debug-Prod */,
+				19479103CE55A73D31356A9B /* Debug-Staging */,
+				01DB53B48CC7D09667DB48A7 /* Release-Prod */,
+				0345A784283AC4E3C2958D87 /* Release-Staging */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug-Prod";
+		};
+		A5E8D8C36E629855FDAF0D1E /* Build configuration list for PBXProject "TidyQuest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FCF7F46EA2CE0AA57FCF2EF /* Debug-Prod */,
+				CA3CBFCF22B0106AFA515795 /* Debug-Staging */,
+				1938555F61143683B4A56590 /* Release-Prod */,
+				8987AFE2AD5C9E5EBB937B44 /* Release-Staging */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug-Prod";
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		FDB92A5EC54BE402EE56A708 /* XCLocalSwiftPackageReference "TidyQuestCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = TidyQuestCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4706D9FBF78EB0C8B87B9B8F /* TidyQuestCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TidyQuestCore;
+		};
+		5C344E26A3BAD27117B705A8 /* TidyQuestCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TidyQuestCore;
+		};
+		70E9E174B3F66F0B7D12A652 /* TidyQuestCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TidyQuestCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 9BC76934E84BA69EF82EB8C3 /* Project object */;
+}

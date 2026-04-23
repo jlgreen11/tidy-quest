@@ -1,4 +1,4 @@
-# Chore Quest
+# TidyQuest
 
 Family chore-gamification for iPhone and iPad — a ledger-based economy your family will actually sustain past month two.
 
@@ -11,7 +11,7 @@ Family chore-gamification for iPhone and iPad — a ledger-based economy your fa
 ## Contents
 
 - [The problem](#the-problem)
-- [What Chore Quest does](#what-chore-quest-does)
+- [What TidyQuest does](#what-tidy-quest-does)
 - [Core concepts](#core-concepts)
 - [Platforms & surfaces](#platforms--surfaces)
 - [Architecture](#architecture)
@@ -46,7 +46,7 @@ Family chore-gamification for iPhone and iPad — a ledger-based economy your fa
 
 5. **Cold-start (the real killer).** A family that abandons during the first 10 minutes of setup, or a kid that never opens the app on day two, kills any chore app regardless of feature depth. This is a first-class design concern of the plan.
 
-## What Chore Quest does
+## What TidyQuest does
 
 At its core: **kids complete chores, earn points, spend them on rewards**. Around that core, the app adds:
 
@@ -93,7 +93,7 @@ At its core: **kids complete chores, earn points, spend them on rewards**. Aroun
 │                          iOS Clients                            │
 │  Parent iPhone · Kid iPhone · iPad · Widgets · Watch (later)   │
 │         │                                                       │
-│         └── ChoreQuestCore (shared Swift package)              │
+│         └── TidyQuestCore (shared Swift package)              │
 │             ├── Observable repository layer                     │
 │             ├── SwiftData local cache                           │
 │             └── HTTPS + Supabase Realtime (WSS)                │
@@ -337,7 +337,7 @@ Full matrix in `TEST_PLAN.md`. Summary:
 
 | Layer | Tool | Coverage target |
 |---|---|---|
-| iOS unit | Swift Testing | ≥70% of `ChoreQuestCore`; 100% of economy logic |
+| iOS unit | Swift Testing | ≥70% of `TidyQuestCore`; 100% of economy logic |
 | UI snapshot | swift-snapshot-testing | 3 tiers × 4 states on kid screens; 3 densities on parent queue; Light + Dark; Dynamic Type AX1 + AX5 |
 | Property-based | Swift Testing + fuzz | 10 ledger invariants (balance identity, idempotency, monotonic streaks, actor NOT NULL, atomic redemption, reversal integrity, same-family FK, reason-required-on-negative, no double-payment, cache staleness) |
 | Edge function | Deno test | Every endpoint × 5 cases (happy, idempotency replay, validation failure, rate limit, App Attest reject) |
@@ -356,19 +356,19 @@ Full matrix in `TEST_PLAN.md`. Summary:
 
 **Environments:**
 
-- `chore-quest-local` (ephemeral dev)
-- `chore-quest-staging` (persistent; friend-family TestFlight connects here)
-- `chore-quest-prod` (persistent; App Store builds connect here)
+- `tidy-quest-local` (ephemeral dev)
+- `tidy-quest-staging` (persistent; friend-family TestFlight connects here)
+- `tidy-quest-prod` (persistent; App Store builds connect here)
 
 iOS build scheme selects backend URL via `Info.plist` build configuration; never from source.
 
 ## Competitive landscape
 
-| App | Lane | Chore Quest's angle |
+| App | Lane | TidyQuest's angle |
 |---|---|---|
 | SkyLight | Shared family calendar + stickers, dedicated wall device | Shallow economy; parent-centric; device-bound |
 | OurHome | Free, clean, solid economy | Real competitor; must beat on preset-pack quality + economy-tuning depth |
-| Joon | Clinical ADHD positioning; $9.99/mo | Higher willingness-to-pay; Chore Quest keeps ADHD pivot as an open option if v0.1 metrics justify |
+| Joon | Clinical ADHD positioning; $9.99/mo | Higher willingness-to-pay; TidyQuest keeps ADHD pivot as an open option if v0.1 metrics justify |
 | Greenlight / BusyKid | Real-money rewards + bank | Not our lane; compliance swamp; IOU-only in our plan |
 | Cozi | Family coordination | Adjacent, not core |
 | Homey | European, well-designed | Pattern reference |
@@ -381,7 +381,7 @@ Three unresolved items that gate coding. See `PLAN_v0.1.md` §13:
 
 1. **Kid specifics.** Count, ages, device ownership. Shapes preset-pack defaults and MVP priorities (a 5-year-old without a device needs iPad prioritized earlier).
 2. **Apple Developer account.** Required for TestFlight and App Store. $99/year + a day of setup.
-3. **Name.** "Chore Quest" is a placeholder. Decide before App Store submission — affects icon, marketing, ASO keywords.
+3. **Name.** "TidyQuest" is a placeholder. Decide before App Store submission — affects icon, marketing, ASO keywords.
 
 ## Docs index
 

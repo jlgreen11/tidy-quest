@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - "sprint-*"
+  pull_request:
+    branches:
+      - main
+      - "sprint-*"
+
+jobs:
+  # ── Swift package: build + test ──────────────────────────────────────────
+  swift-core:
+    name: Swift — build & test TidyQuestCore
+    # macos-15 ships Xcode 16.x / Swift 6; macos-14 only has Swift 5.10
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: ios/TidyQuestCore
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        # Xcode 16.x is at this path on macos-15 runners.
+        # Falls back gracefully if not found (xcode-select exits 0 when already correct).
+        run: |
+          XCODE_PATH=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
+          if [ -n "$XCODE_PATH" ]; then
+            sudo xcode-select -s "${XCODE_PATH}/Contents/Developer"
+          fi
+          swift --version
+
+      - name: Swift build
+        run: swift build -c release
+
+      - name: Swift test
+        run: swift test
+
+  # ── Supabase: migration lint ─────────────────────────────────────────────
+  migration-lint:
+    name: Supabase — migration lint
+    runs-on: ubuntu-latest
+    # Expose token as job-level env so step if: conditions can check it.
+    # secrets context is not available in job-level if:, but env context is
+    # available in step-level if: once set here.
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: supabase db lint
+        # Skip gracefully when SUPABASE_ACCESS_TOKEN secret is not configured.
+        if: ${{ env.SUPABASE_ACCESS_TOKEN != '' }}
+        run: supabase db lint --project-id "${{ secrets.SUPABASE_PROJECT_ID_STAGING }}"
+
+  # ── Deno edge-function tests ─────────────────────────────────────────────
+  deno-functions:
+    name: Deno — edge function schema tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Deno test (unit/schema only — no running Supabase stack required)
+        # Exclude the 7 integration test files that make HTTP calls to localhost:54321.
+        # Those tests require a full local Supabase stack (Docker) and are skipped in CI.
+        # All other tests (schema validation, contract shape, payload builders) run here.
+        # See docs/CI.md for how to run the full integration suite locally.
+        run: |
+          deno test --allow-env \
+            --ignore=family-create \
+            --ignore=family-delete \
+            --ignore=family-update \
+            --ignore=user-add-kid \
+            --ignore=user-claim-pair \
+            --ignore=user-pair-device \
+            --ignore=user-revoke-device \
+            .
+        working-directory: supabase/functions

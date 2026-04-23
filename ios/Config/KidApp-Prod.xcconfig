@@ -1,0 +1,6 @@
+// KidApp — Production environment
+// Anon key is safe to commit — Supabase anon JWTs are designed to be bundled
+// in client apps. RLS policies on the DB enforce actual security. Service role
+// keys must NEVER appear here; those live in Supabase dashboard secrets only.
+SUPABASE_URL = https://REPLACE_WITH_PROD_PROJECT.supabase.co
+SUPABASE_ANON_KEY = REPLACE_WITH_PROD_ANON_KEY
