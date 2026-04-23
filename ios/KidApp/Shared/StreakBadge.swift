@@ -18,12 +18,20 @@ struct StreakBadge: View {
         }
     }
 
+    @ViewBuilder private var flameImage: some View {
+        let base = Image(systemName: "flame.fill")
+            .foregroundStyle(flameColor)
+            .font(.system(size: tier == .advanced ? 12 : 14))
+        if #available(iOS 18.0, *) {
+            base.symbolEffect(.bounce, options: .speed(1.5))
+        } else {
+            base
+        }
+    }
+
     var body: some View {
         HStack(spacing: 2) {
-            Image(systemName: "flame.fill")
-                .foregroundStyle(flameColor)
-                .font(.system(size: tier == .advanced ? 12 : 14))
-                .symbolEffect(.bounce, options: .speed(1.5))
+            flameImage
 
             Text("\(count)")
                 .font(tier.captionFont)

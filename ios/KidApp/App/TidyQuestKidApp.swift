@@ -99,14 +99,22 @@ struct AppRootGate: View {
 
     // MARK: - Splash
 
+    @ViewBuilder private var splashIcon: some View {
+        let base = Image(systemName: "star.circle.fill")
+            .font(.system(size: 80))
+            .foregroundStyle(
+                LinearGradient(colors: [.purple, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
+            )
+        if #available(iOS 18.0, *) {
+            base.symbolEffect(.bounce, options: .repeating.speed(0.4))
+        } else {
+            base
+        }
+    }
+
     private var splashView: some View {
         VStack(spacing: 16) {
-            Image(systemName: "star.circle.fill")
-                .font(.system(size: 80))
-                .foregroundStyle(
-                    LinearGradient(colors: [.purple, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
-                )
-                .symbolEffect(.bounce, options: .repeating.speed(0.4))
+            splashIcon
 
             Text("TidyQuest")
                 .font(.system(size: 34, weight: .bold, design: .rounded))
@@ -136,21 +144,31 @@ struct AppRootGate: View {
 }
 
 #Preview("AppRootGate — authenticated (Standard kid)") {
-    let api = MockAPIClient()
-    @Previewable @State var auth = AuthController(
-        apiClient: api,
-        keychain: KeychainStore(service: "com.jlgreen11.tidyquest.kid")
-    )
-    let kid = MockAPIClient.seedUsers.first(where: { $0.complexityTier == .standard })!
-    auth.setCurrentUser(kid)
-    let family = FamilyRepository(apiClient: api)
-    family.loadSeedData()
-    return AppRootGate(
-        authController: auth,
-        choreRepository: ChoreRepository(apiClient: api),
-        ledgerRepository: LedgerRepository(apiClient: api),
-        rewardRepository: RewardRepository(apiClient: api),
-        questRepository: QuestRepository(apiClient: api),
-        familyRepository: family
-    )
+    struct AuthenticatedPreview: View {
+        let api = MockAPIClient()
+        @State var auth: AuthController
+        init() {
+            let a = AuthController(
+                apiClient: MockAPIClient(),
+                keychain: KeychainStore(service: "com.jlgreen11.tidyquest.kid")
+            )
+            if let kid = MockAPIClient.seedUsers.first(where: { $0.complexityTier == .standard }) {
+                a.setCurrentUser(kid)
+            }
+            _auth = State(initialValue: a)
+        }
+        var body: some View {
+            let family = FamilyRepository(apiClient: api)
+            let _ = family.loadSeedData()
+            AppRootGate(
+                authController: auth,
+                choreRepository: ChoreRepository(apiClient: api),
+                ledgerRepository: LedgerRepository(apiClient: api),
+                rewardRepository: RewardRepository(apiClient: api),
+                questRepository: QuestRepository(apiClient: api),
+                familyRepository: family
+            )
+        }
+    }
+    return AuthenticatedPreview()
 }
