@@ -10,6 +10,9 @@
 
 CREATE EXTENSION IF NOT EXISTS pgtap;
 
+-- Test helpers live in their own schema to keep them out of public.
+CREATE SCHEMA IF NOT EXISTS tests;
+
 -- ---------------------------------------------------------------------------
 -- set_as_parent(user_id, family_id)
 --
