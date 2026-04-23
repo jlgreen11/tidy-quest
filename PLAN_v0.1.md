@@ -193,7 +193,7 @@ Aunt moves in with 7-year-old for summer. Parent adds child: name, age, color, a
 
 ## 5. Information architecture and screens
 
-Three experiences: parent iPhone (admin), kid iPhone (consumer), iPad (command center — "scaled iPhone" only in v0.1; see §11 scope cut). Shared SwiftUI codebase, SwiftData for offline cache (see §8 for iOS local storage decision TD3).
+Three experiences: parent iPhone (admin), kid iPhone (consumer), iPad family command center. Shared SwiftUI codebase, SwiftData for offline cache (see §8 for iOS local storage decision TD3). v0.1 ships iPad as scaled iPhone; dedicated command-center layout ships v0.2 (4 weeks, see §11).
 
 ### 5.1 Parent app — 5 tabs (revised from 7 in v0)
 
@@ -212,9 +212,55 @@ iOS HIG caps tab bars at 5 before "More." v0's 7 tabs violated this. Revised arc
 - **Quests.** Current and upcoming.
 - **Me.** Avatar, color, streaks, achievements. Ledger accessed as a subscreen of Me (Ledger as a top-level tab was over-promoted for a 7-year-old).
 
-### 5.3 iPad
+### 5.3 iPad family command center
 
-v0.1: scaled iPhone layout only. Dedicated command-center layout deferred past v1.0 (see §11 scope cut and DECISIONS.md UC1).
+**v0.1:** scaled iPhone layout (MVP only).
+**v0.2:** dedicated command-center layout, spec'd below.
+
+The iPad is the family's kitchen-counter dashboard. It is a genuinely different surface, not just a scaled iPhone — designed to be glanced at from 6 feet away and to handle multiple kids using the same physical device throughout the day. This spec incorporates the Phase 2 design-review findings from `REVIEW.md` that v0 handwaved.
+
+**Layout (landscape, mounted):**
+
+- **Left column (25% width):** one card per kid, each showing today's progress ring (filled proportion, not aggregate), balance, and next chore title. Tap-to-expand into the kid's today list.
+- **Center panel (50%):** family-wide today view — running quests (if active), recent completion activity, family progress ring for active family goal.
+- **Right column (25%):** pending approvals queue with thumbnails, recent ledger activity across all kids.
+
+**Type ladder (concrete, 6-foot legibility):**
+
+- Kid-name headers: **72pt SF Rounded Bold**
+- Balance figures: **60pt SF Mono** (tabular numerals so digits don't jump)
+- Chore titles: **32pt SF Rounded Medium**
+- Secondary labels (timestamps, counts): **24pt SF Rounded Regular** (never smaller)
+
+**Contrast:** WCAG AAA (7:1) minimum on all text. Dark Mode is the default on mounted iPad (less light pollution in a kitchen at night); Light Mode available.
+
+**Ambient mode (after 10 minutes of no interaction):**
+
+- Dim to 20% brightness.
+- Hide per-kid balances (privacy — a lit screen showing "Maya: 420 pts" is visible from the living room and can embarrass a sibling).
+- Show a large clock + family color band + "Tap anywhere" hint.
+- Touch anywhere → full brightness, returns to last-active view or wake/claim (below) if > 30 minutes.
+
+**Wake/claim flow (when a kid walks up):**
+
+- After > 30 min idle, the next touch shows large avatar bubbles — one per kid in the family, arranged as a grid.
+- Kid taps their avatar.
+- PIN entry (4 digits). **Optional for Starter tier, mandatory for Standard/Advanced.** (Starter tier kids are young enough that cross-marking is a small risk; older siblings gaming each other is the real anti-abuse need.)
+- Session scoped to that kid for **5 minutes**, after which any action re-prompts for the PIN. Tile interactions during that window record `completed_by_device` + `completed_as_user` separately from any other identity — AuditLog captures both for rollback (Plan §10, sibling sabotage countermeasure).
+
+**Multi-kid simultaneous use:** two kids at the iPad at once → first claimant holds the session; second kid sees "Wait for [name] to finish" or taps-to-swap which ends the first session. Family preference in Settings: "simultaneous" (split-screen, each kid their own tile region) vs "serial" (default). Simultaneous is v1.0, not v0.2.
+
+**Parent access on iPad:** a dedicated "Parent" avatar in the claim grid. Parent PIN or biometric (Face ID) unlock; full parent app available. Parents can approve from iPad, not just phone — useful for a parent cooking dinner when the kid wants a reward.
+
+**What it's NOT:** not a second phone-app-per-kid; not a primary auth surface (device pairing still happens on phones, not the shared iPad); not storing secrets beyond the short-lived session token.
+
+**Accessibility notes (iPad-specific):**
+
+- Type ladder respects Dynamic Type; AX5 scales everything up proportionally (kid-name 72pt → 96pt, balance 60pt → 84pt).
+- VoiceOver: swipe-through order follows reading order (left column → center → right). Each kid card has a container trait; expanded tile has child buttons.
+- Reduce Motion: ambient-mode cycle is paused; only brightness dims. No cross-fade animations when kid cards refresh; hard cuts.
+
+**iPad-only widget considerations:** iPad home-screen widgets exist and matter when iPad is *not* mounted (kid using it on the couch). But the command-center layout is for mounted use; widgets are for handheld. Both coexist with the scaled-iPhone layout.
 
 ### 5.4 Accessibility, states, and micro-interactions (new in v0.1)
 
@@ -443,7 +489,7 @@ Unchanged from v0. Adds:
 
 ## 11. MVP scope (revised)
 
-v0 promised 8–10 weeks evenings. With adds (CI, tests, migrations, staging, onboarding spec, a11y) and cuts (offline, iPad command center, some mechanics), the revised target is **10–14 weeks evenings**. Honest; not compressed.
+v0 promised 8–10 weeks evenings. With adds (CI, tests, migrations, staging, onboarding spec, a11y) and cuts (offline, some mechanics), the revised target is **10–14 weeks evenings for v0.1**. iPad command-center dedicated layout stays in v0.2 (+4 weeks). Honest; not compressed.
 
 **v0.1 (TestFlight to self + 2–3 friend families, 10–14 weeks):**
 
@@ -471,10 +517,11 @@ v0 promised 8–10 weeks evenings. With adds (CI, tests, migrations, staging, on
 - GitHub Actions CI: Swift build + test, RLS test suite, Supabase migration lint.
 - Staging Supabase project + separate build scheme.
 - Sentry client-side crash reporting (PII-scrubbed).
-- **NO:** offline writes, iPad command-center layout, quests UI, combos, surprise multipliers, family pool, streak freezes, Watch, App Intents, saving goals (v0.2).
+- **NO:** offline writes, iPad dedicated command-center layout, quests UI, combos, surprise multipliers, family pool, streak freezes, Watch, App Intents, saving goals (all v0.2 or later).
 
-**v0.2 (+4–6 weeks):**
+**v0.2 (+6–8 weeks):**
 
+- **iPad family command-center dedicated layout** (see §5.3). Includes wake/claim flow, ambient mode, PIN session handling, type ladder at 6-foot legibility.
 - Offline writes with conflict resolution and dead-letter queue.
 - Monthly / seasonal chore types (UI).
 - Routines as first-class (combo bonus).
@@ -498,7 +545,7 @@ v0 promised 8–10 weeks evenings. With adds (CI, tests, migrations, staging, on
 **v1.5+:**
 
 - Watch companion.
-- Optional iPad dedicated command center layout (only if v1.0 data shows iPad is primary surface for > 30% of families).
+- iPad simultaneous-use mode (split-screen per kid) — promotion from §5.3 "serial" default if families report demand.
 
 ---
 

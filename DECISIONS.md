@@ -23,19 +23,17 @@ Codex voice unavailable (`codex` binary not installed on this host). Review proc
 
 All three are accepted per auto-accept preference. Each can be reverted.
 
-### UC1: Cut the iPad command center from MVP and v0.2
+### UC1: ~~Cut the iPad command center from MVP and v0.2~~ — **REVERTED 2026-04-22**
 
 **You said:** iPad command center is a key surface; ship "scaled iPhone" in v0.1, dedicated layout in v0.2.
 
-**Both voices recommend:** Cut the dedicated iPad layout entirely through v1.0. Keep scaled iPhone forever; iPad value emerges naturally if the iPhone app works.
+**Both voices recommended:** Cut the dedicated iPad layout entirely through v1.0.
 
-**Why:** Mounted-iPad category is shallower than it looks (SkyLight's dedicated device succeeds because it's just that, not a borrowed iPad). Burns 4 weeks on a surface historically few families sustain. Widgets on iPhone home screen cover 80% of the "glanceable family status" need.
+**Why the recommendation:** Mounted-iPad category is shallower than it looks; burns 4 weeks; widgets cover 80% of the need.
 
-**Missing context we might lack:** If you specifically have an iPad mounted in your kitchen already and know it's going to be central — or if this is your primary personal use case — that's information we don't have.
+**User override:** Restore iPad command-center layout to v0.2. User has context we lacked (likely: own iPad mounted in kitchen, primary personal use case).
 
-**If wrong, cost:** You lose 4–6 weeks of iPad dashboard work that ~20% of families might have loved.
-
-**Decision taken:** Cut iPad dedicated layout through v1.0. Retained as "scaled iPhone" always.
+**Final decision:** **iPad dedicated command-center layout ships v0.2** per original plan. v0.1 remains scaled iPhone only. Design-review findings incorporated so the spec is production-grade: explicit type ladder (72/60/32/24pt), WCAG AAA contrast, ambient mode that hides balances after 10 min, wake/claim flow with per-kid PIN, simultaneous-use mode deferred to v1.5. See `PLAN_v0.1.md` §5.3.
 
 ---
 
