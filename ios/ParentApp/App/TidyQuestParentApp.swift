@@ -44,7 +44,7 @@ struct TidyQuestParentApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ParentRootView(
+            RootGate(
                 authController: authController,
                 familyRepo: familyRepo,
                 choreRepo: choreRepo,
@@ -63,6 +63,38 @@ struct TidyQuestParentApp: App {
             .onContinueUserActivity("com.jlgreen11.tidyquest.approval") { _ in
                 // Act 4 will navigate to Approvals tab and highlight the item
             }
+        }
+    }
+}
+
+// MARK: - Root gate (Onboarding vs main app)
+
+/// Shows OnboardingFlow when no family exists yet; otherwise shows ParentRootView.
+@available(iOS 17, *)
+private struct RootGate: View {
+    var authController: AuthController
+    var familyRepo: FamilyRepository
+    var choreRepo: ChoreRepository
+    var ledgerRepo: LedgerRepository
+    var rewardRepo: RewardRepository
+
+    var body: some View {
+        if authController.currentUser == nil && familyRepo.family == nil {
+            OnboardingFlow(
+                familyRepo: familyRepo,
+                authController: authController,
+                onComplete: {
+                    // After onboarding, family is created; RootGate re-evaluates.
+                }
+            )
+        } else {
+            ParentRootView(
+                authController: authController,
+                familyRepo: familyRepo,
+                choreRepo: choreRepo,
+                ledgerRepo: ledgerRepo,
+                rewardRepo: rewardRepo
+            )
         }
     }
 }

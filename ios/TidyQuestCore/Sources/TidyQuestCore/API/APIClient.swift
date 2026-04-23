@@ -35,6 +35,10 @@ public protocol APIClient: Sendable {
     func issueFine(_ req: IssueFineRequest) async throws -> PointTransaction
     func reverseTransaction(_ id: UUID, reason: String, appAttestToken: String) async throws -> PointTransaction
 
+    // MARK: - Challenges / Quests
+
+    func fetchChallenges(familyId: UUID) async throws -> [Challenge]
+
     // MARK: - Subscription
 
     func updateSubscription(_ receipt: String) async throws -> Subscription

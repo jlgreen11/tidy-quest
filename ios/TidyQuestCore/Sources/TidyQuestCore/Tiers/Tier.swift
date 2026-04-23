@@ -85,7 +85,7 @@ public enum MotionDensity: Sendable {
 
 extension Color {
     /// Initialise a Color from a 6-digit hex string (with or without leading `#`).
-    init(hex: String) {
+    public init(hex: String) {
         let hex = hex.trimmingCharacters(in: .init(charactersIn: "#"))
         let int = UInt64(hex, radix: 16) ?? 0
         let r = Double((int >> 16) & 0xFF) / 255

@@ -5,7 +5,8 @@ import TidyQuestCore
 
 /// Kid app entry point.
 /// Wires AuthController (device-pairing flavor), ChoreRepository, LedgerRepository,
-/// and RewardRepository — all fed from MockAPIClient() in DEBUG builds.
+/// RewardRepository, QuestRepository, and FamilyRepository — all fed from MockAPIClient()
+/// in DEBUG builds.
 @main
 struct TidyQuestKidApp: App {
 
@@ -16,6 +17,8 @@ struct TidyQuestKidApp: App {
     private let choreRepository: ChoreRepository
     private let ledgerRepository: LedgerRepository
     private let rewardRepository: RewardRepository
+    private let questRepository: QuestRepository
+    private let familyRepository: FamilyRepository
 
     init() {
         #if DEBUG
@@ -34,6 +37,8 @@ struct TidyQuestKidApp: App {
         self.choreRepository = ChoreRepository(apiClient: client)
         self.ledgerRepository = LedgerRepository(apiClient: client)
         self.rewardRepository = RewardRepository(apiClient: client)
+        self.questRepository = QuestRepository(apiClient: client)
+        self.familyRepository = FamilyRepository(apiClient: client)
     }
 
     var body: some Scene {
@@ -42,7 +47,9 @@ struct TidyQuestKidApp: App {
                 authController: authController,
                 choreRepository: choreRepository,
                 ledgerRepository: ledgerRepository,
-                rewardRepository: rewardRepository
+                rewardRepository: rewardRepository,
+                questRepository: questRepository,
+                familyRepository: familyRepository
             )
             .task {
                 await authController.restoreSession()
@@ -60,6 +67,8 @@ struct AppRootGate: View {
     let choreRepository: ChoreRepository
     let ledgerRepository: LedgerRepository
     let rewardRepository: RewardRepository
+    let questRepository: QuestRepository
+    let familyRepository: FamilyRepository
 
     var body: some View {
         Group {
@@ -70,7 +79,9 @@ struct AppRootGate: View {
                     kid: kid,
                     choreRepository: choreRepository,
                     ledgerRepository: ledgerRepository,
-                    rewardRepository: rewardRepository
+                    rewardRepository: rewardRepository,
+                    questRepository: questRepository,
+                    familyRepository: familyRepository
                 )
                 .tierTheme(kid.complexityTier.tier)
                 .onAppear {
@@ -108,6 +119,7 @@ struct AppRootGate: View {
 }
 
 // MARK: - Preview
+
 #Preview("AppRootGate — unauthenticated") {
     @Previewable @State var auth = AuthController(
         apiClient: MockAPIClient(),
@@ -117,7 +129,9 @@ struct AppRootGate: View {
         authController: auth,
         choreRepository: ChoreRepository(apiClient: MockAPIClient()),
         ledgerRepository: LedgerRepository(apiClient: MockAPIClient()),
-        rewardRepository: RewardRepository(apiClient: MockAPIClient())
+        rewardRepository: RewardRepository(apiClient: MockAPIClient()),
+        questRepository: QuestRepository(apiClient: MockAPIClient()),
+        familyRepository: FamilyRepository(apiClient: MockAPIClient())
     )
 }
 
@@ -129,10 +143,14 @@ struct AppRootGate: View {
     )
     let kid = MockAPIClient.seedUsers.first(where: { $0.complexityTier == .standard })!
     auth.setCurrentUser(kid)
+    let family = FamilyRepository(apiClient: api)
+    family.loadSeedData()
     return AppRootGate(
         authController: auth,
         choreRepository: ChoreRepository(apiClient: api),
         ledgerRepository: LedgerRepository(apiClient: api),
-        rewardRepository: RewardRepository(apiClient: api)
+        rewardRepository: RewardRepository(apiClient: api),
+        questRepository: QuestRepository(apiClient: api),
+        familyRepository: family
     )
 }

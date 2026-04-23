@@ -25,6 +25,8 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
         public static let templateTheoFeedDog   = UUID(uuidString: "44444444-4444-4444-4444-444444444407")!
         public static let templateTheoToys      = UUID(uuidString: "44444444-4444-4444-4444-444444444408")!
 
+        public static let questWeekendDeepClean = UUID(uuidString: "77777777-7777-7777-7777-777777777701")!
+
         public static let reward30MinTablet     = UUID(uuidString: "55555555-5555-5555-5555-555555555501")!
         public static let rewardIceCream        = UUID(uuidString: "55555555-5555-5555-5555-555555555502")!
         public static let rewardPickRestaurant  = UUID(uuidString: "55555555-5555-5555-5555-555555555503")!
@@ -184,6 +186,45 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
         )
     ]
 
+    /// Weekend Deep Clean quest — active, 2 of 5 chore templates done per kid, ends Sunday 6 PM.
+    public static var seedChallenges: [Challenge] {
+        let now = Date()
+        // Start of this week (Saturday), end Sunday 6 PM
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: now)  // 1=Sun…7=Sat
+        let daysTilSat = (7 - weekday) % 7
+        let daysTilSun = daysTilSat + 1
+        let saturday = calendar.date(byAdding: .day, value: daysTilSat, to: now) ?? now
+        let startAt = calendar.startOfDay(for: saturday)
+        var components = DateComponents()
+        components.hour = 18
+        let sunday = calendar.date(byAdding: .day, value: daysTilSun, to: calendar.startOfDay(for: now)) ?? now
+        let endAt = calendar.date(bySettingHour: 18, minute: 0, second: 0, of: sunday) ?? now.addingTimeInterval(86400)
+
+        return [
+            Challenge(
+                id: SeedID.questWeekendDeepClean,
+                familyId: SeedID.family,
+                name: "Weekend Deep Clean",
+                description: "Work together to earn a family bonus! Complete all assigned chores before Sunday 6 PM.",
+                startAt: startAt,
+                endAt: endAt,
+                participantUserIds: [SeedID.ava, SeedID.kai, SeedID.zara, SeedID.theo],
+                constituentChoreTemplateIds: [
+                    SeedID.templateAvaMakeBed,
+                    SeedID.templateAvaBrushTeeth,
+                    SeedID.templateKaiMakeBed,
+                    SeedID.templateZaraDishwasher,
+                    SeedID.templateZaraCats
+                ],
+                bonusPoints: 100,
+                status: .active,
+                createdAt: now.addingTimeInterval(-86400),
+                updatedAt: now.addingTimeInterval(-3600)
+            )
+        ]
+    }
+
     public static let seedRewards: [Reward] = [
         Reward(id: SeedID.reward30MinTablet, familyId: SeedID.family, name: "30 min tablet time",
                icon: "ipad", category: .screenTime, price: 75, cooldown: 86400, autoApproveUnder: 30,
@@ -217,6 +258,7 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
     private var transactions: [UUID: PointTransaction] = [:]
     private var rewards: [UUID: Reward]
     private var redemptions: [UUID: RedemptionRequest] = [:]
+    private var challenges: [UUID: Challenge]
     private var subscription: Subscription = Subscription(
         id: UUID(uuidString: "88888888-8888-8888-8888-888888888801")!,
         familyId: SeedID.family,
@@ -235,6 +277,7 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
         users = Dictionary(uniqueKeysWithValues: Self.seedUsers.map { ($0.id, $0) })
         templates = Dictionary(uniqueKeysWithValues: Self.seedTemplates.map { ($0.id, $0) })
         rewards = Dictionary(uniqueKeysWithValues: Self.seedRewards.map { ($0.id, $0) })
+        challenges = Dictionary(uniqueKeysWithValues: Self.seedChallenges.map { ($0.id, $0) })
 
         // Seed today's chore instances
         let today = Self.isoDate(from: Date())
@@ -491,6 +534,12 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
         )
         transactions[reversal.id] = reversal
         return reversal
+    }
+
+    // MARK: - Challenges / Quests
+
+    public func fetchChallenges(familyId: UUID) async throws -> [Challenge] {
+        challenges.values.filter { $0.familyId == familyId }.sorted { $0.startAt < $1.startAt }
     }
 
     // MARK: - Subscription

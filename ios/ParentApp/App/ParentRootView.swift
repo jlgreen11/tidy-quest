@@ -72,43 +72,33 @@ struct ParentRootView: View {
             .tag(Tab.family)
             .accessibilityLabel("Family tab")
 
-            // Economy — placeholder for Wave B (C3)
-            NavigationStack {
-                PlaceholderView(title: "Economy", icon: "chart.bar.fill")
-            }
+            // Economy — C3 Wave B
+            EconomyView(
+                familyRepo: familyRepo,
+                choreRepo: choreRepo,
+                ledgerRepo: ledgerRepo,
+                rewardRepo: rewardRepo,
+                familyPath: $familyPath
+            )
             .tabItem {
                 Label("Economy", systemImage: "chart.bar.fill")
             }
             .tag(Tab.economy)
-            .accessibilityLabel("Economy tab — coming soon")
+            .accessibilityLabel("Economy tab")
 
-            // Settings — placeholder for Wave B (C3)
-            NavigationStack {
-                PlaceholderView(title: "Settings", icon: "gearshape.fill")
-            }
+            // Settings — C3 Wave B
+            SettingsView(
+                familyRepo: familyRepo,
+                choreRepo: choreRepo,
+                rewardRepo: rewardRepo,
+                authController: authController
+            )
             .tabItem {
                 Label("Settings", systemImage: "gearshape.fill")
             }
             .tag(Tab.settings)
-            .accessibilityLabel("Settings tab — coming soon")
+            .accessibilityLabel("Settings tab")
         }
-    }
-}
-
-// MARK: - Coming-soon placeholder
-
-private struct PlaceholderView: View {
-    let title: String
-    let icon: String
-
-    var body: some View {
-        EmptyStateView(
-            systemImage: icon,
-            title: title,
-            message: "Coming soon — this tab will be built in Wave B."
-        )
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.large)
     }
 }
 

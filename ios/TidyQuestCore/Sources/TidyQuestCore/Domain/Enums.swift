@@ -82,6 +82,7 @@ public enum RedemptionStatus: String, Codable, Sendable, Hashable, CaseIterable 
 
 public enum ChallengeStatus: String, Codable, Sendable, Hashable, CaseIterable {
     case draft
+    case upcoming
     case active
     case completed
     case expired

@@ -184,6 +184,13 @@ public final class SupabaseAPIClient: APIClient {
         )
     }
 
+    // MARK: - Challenges / Quests
+
+    public func fetchChallenges(familyId: UUID) async throws -> [Challenge] {
+        struct Body: Encodable { let family_id: UUID }
+        return try await invoke(function: "challenge.list", body: Body(family_id: familyId))
+    }
+
     // MARK: - Subscription
 
     public func updateSubscription(_ receipt: String) async throws -> Subscription {
