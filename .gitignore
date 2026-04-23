@@ -5,3 +5,12 @@
 node_modules/
 build/
 .claude/settings.local.json
+
+# Swift / Xcode
+.build/
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+supabase/.temp/
+supabase/.branches/

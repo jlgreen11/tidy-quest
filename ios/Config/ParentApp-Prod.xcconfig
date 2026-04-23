@@ -1,0 +1,4 @@
+// ParentApp — Production environment
+// Do NOT commit real secrets here. Populate via CI/CD secret injection.
+SUPABASE_URL = https://REPLACE_WITH_PROD_PROJECT.supabase.co
+SUPABASE_ANON_KEY = REPLACE_WITH_PROD_ANON_KEY
