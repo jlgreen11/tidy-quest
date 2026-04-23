@@ -39,8 +39,13 @@ const MEI_APPLE_SUB  = "mei-001";
 // Kai's Homework instance (seed status: pending)
 const HOMEWORK_INSTANCE_ID = "66666666-6666-6666-6666-666666666604";
 
-// Reward: "30 min tablet time" (price: 75, auto_approve_under: 30)
-const REWARD_ID = "55555555-5555-5555-5555-555555555501";
+// Reward: "Pick the restaurant" (price: 100, cooldown: NULL, auto_approve_under: NULL)
+// Chosen deliberately: cooldown NULL means the test is idempotent across runs —
+// reward 501 ("30 min tablet time") has cooldown 86400s (24h), which causes HTTP 409
+// COOLDOWN_ACTIVE on repeat runs within the day. 503 is a privilege-category reward
+// with no cooldown and no auto-approve threshold, so Step 5 still exercises the
+// explicit parent-approval path → redemption_request status transitions to "fulfilled".
+const REWARD_ID = "55555555-5555-5555-5555-555555555503";
 
 // ─── Auth tokens ──────────────────────────────────────────────────────────────
 //
@@ -182,9 +187,11 @@ Deno.test("Step 2 — Complete chore: Kai's Homework via device token", async ()
     method: "POST",
     headers: kidHeaders(),
     body: JSON.stringify({
-      instance_id:         HOMEWORK_INSTANCE_ID,
-      completed_at:        now,
-      completed_by_device: null,
+      instance_id:  HOMEWORK_INSTANCE_ID,
+      completed_at: now,
+      // NOTE: completed_by_device is z.string().max(200).optional() — .optional() means
+      // string | undefined, NOT string | null. Omit the field entirely when not used;
+      // sending null fails validation with HTTP 400 INVALID_INPUT.
     }),
   });
 
@@ -267,7 +274,7 @@ Deno.test("Step 3 — Approve chore: parent Bearer approves Kai's Homework", asy
 
 // ─── Step 4: Request a reward ─────────────────────────────────────────────────
 
-Deno.test("Step 4 — Request reward: Kai requests 30-min tablet time", async () => {
+Deno.test("Step 4 — Request reward: Kai requests 'Pick the restaurant'", async () => {
   const res = await fetch(fnUrl("redemption-request"), {
     method: "POST",
     headers: kidHeaders(),
