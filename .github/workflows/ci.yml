@@ -42,8 +42,11 @@ jobs:
   migration-lint:
     name: Supabase — migration lint
     runs-on: ubuntu-latest
-    # Skip gracefully when secrets are not configured (forks, sprint branches)
-    if: ${{ secrets.SUPABASE_ACCESS_TOKEN != '' }}
+    # Expose token as job-level env so step if: conditions can check it.
+    # secrets context is not available in job-level if:, but env context is
+    # available in step-level if: once set here.
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -53,9 +56,9 @@ jobs:
           version: latest
 
       - name: supabase db lint
+        # Skip gracefully when SUPABASE_ACCESS_TOKEN secret is not configured.
+        if: ${{ env.SUPABASE_ACCESS_TOKEN != '' }}
         run: supabase db lint --project-id "${{ secrets.SUPABASE_PROJECT_ID_STAGING }}"
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
   # ── Deno edge-function tests ─────────────────────────────────────────────
   deno-functions:
