@@ -129,8 +129,8 @@ struct LedgerView: View {
 
     // MARK: - Transaction list
 
-    private var transactionList: some View {
-        List {
+    @ViewBuilder private var transactionList: some View {
+        let list = List {
             ForEach(groupedTransactions, id: \.day) { group in
                 Section(header: Text(group.day)
                     .font(tier.captionFont)
@@ -161,7 +161,11 @@ struct LedgerView: View {
                 .frame(minHeight: tier.minTapTarget)
             }
         }
-        .listStyle(tier == .starter ? .insetGrouped : .plain)
+        if tier == .starter {
+            list.listStyle(.insetGrouped)
+        } else {
+            list.listStyle(.plain)
+        }
     }
 
     // MARK: - Transaction row
