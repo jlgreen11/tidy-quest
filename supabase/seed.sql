@@ -204,7 +204,7 @@ BEGIN
     FROM app_user
     WHERE family_id = '11111111-1111-1111-1111-111111111111' AND role = 'child'
   LOOP
-    FOR day_offset IN 0..21 LOOP
+    FOR day_offset IN 1..21 LOOP
       -- Realistic completion rate: Kai 90% (ADHD routine), Ava 75%, Theo 60%, Zara 80%
       -- Skip some days for realism
       IF (kid_row.display_name = 'Kai' AND random() < 0.95) OR
@@ -308,7 +308,7 @@ VALUES
    current_date + interval '8 hours'),
   ('66666666-6666-6666-6666-666666666608', '44444444-4444-4444-4444-444444444408',
    '33333333-3333-3333-3333-333333333334', current_date, 'pending',
-   NULL, current_date + interval '4 hours');
+   NULL, NULL, current_date + interval '4 hours');
 
 -- ============================================================
 -- Recent fine (Zara, "Rude to sibling") — contested
