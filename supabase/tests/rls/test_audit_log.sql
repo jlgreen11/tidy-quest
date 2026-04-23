@@ -152,12 +152,14 @@ SELECT tests.set_as_parent(
   '22222222-2222-2222-2222-222222222221'::uuid,
   '11111111-1111-1111-1111-111111111111'::uuid
 );
--- No UPDATE policy → silent denial (0 rows updated)
-UPDATE audit_log SET action = 'tampered'
+-- No UPDATE policy → silent denial (0 rows updated). Use a valid enum
+-- value for 'action' — the point of the test is that RLS prevents the
+-- update from sticking, not to test enum validation.
+UPDATE audit_log SET action = 'family.delete'
 WHERE id = 'e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e101';
 SET ROLE postgres;
 SELECT tests.expect_rows(
-  'SELECT * FROM audit_log WHERE id = ''e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e101'' AND action = ''tampered''',
+  'SELECT * FROM audit_log WHERE id = ''e1e1e1e1-e1e1-e1e1-e1e1-e1e1e1e1e101'' AND action = ''family.delete''',
   0
 );
 SELECT tests.end_test('audit_log: parent cannot UPDATE audit_log');
