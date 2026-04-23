@@ -34,6 +34,23 @@ public final class RewardRepository: @unchecked Sendable {
         rewards = MockAPIClient.seedRewards
     }
 
+    // MARK: - Cloud load
+
+    /// Fetch reward catalog and pending redemption requests from the cloud DB.
+    public func load(familyId: UUID) async {
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
+        do {
+            async let fetchedRewards     = apiClient.listRewards(familyId: familyId)
+            async let fetchedRedemptions = apiClient.listPendingRedemptions(familyId: familyId)
+            rewards     = try await fetchedRewards
+            redemptions = try await fetchedRedemptions
+        } catch {
+            self.error = error
+        }
+    }
+
     // MARK: - Redemption mutations
 
     public func requestRedemption(rewardId: UUID, userId: UUID) async throws -> RedemptionRequest {

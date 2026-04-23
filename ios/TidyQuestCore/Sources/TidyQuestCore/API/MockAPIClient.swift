@@ -405,21 +405,26 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
 
     public func updateFamily(_ req: UpdateFamilyRequest) async throws -> Family {
         guard let existing = families[req.familyId] else { throw APIError.notFound }
+        // Merge settings: existing keys + incoming keys (incoming wins on conflict)
+        var mergedSettings = existing.settings
+        if let incoming = req.settings {
+            for (k, v) in incoming { mergedSettings[k] = v }
+        }
         let updated = Family(
             id: existing.id,
             name: req.name ?? existing.name,
             timezone: req.timezone ?? existing.timezone,
-            dailyResetTime: existing.dailyResetTime,
-            quietHoursStart: existing.quietHoursStart,
-            quietHoursEnd: existing.quietHoursEnd,
+            dailyResetTime: req.dailyResetTime ?? existing.dailyResetTime,
+            quietHoursStart: req.quietHoursStart ?? existing.quietHoursStart,
+            quietHoursEnd: req.quietHoursEnd ?? existing.quietHoursEnd,
             leaderboardEnabled: req.leaderboardEnabled ?? existing.leaderboardEnabled,
             siblingLedgerVisible: req.siblingLedgerVisible ?? existing.siblingLedgerVisible,
             subscriptionTier: existing.subscriptionTier,
             subscriptionExpiresAt: existing.subscriptionExpiresAt,
-            weeklyBandTarget: existing.weeklyBandTarget,
+            weeklyBandTarget: req.weeklyBandTarget ?? existing.weeklyBandTarget,
             dailyDeductionCap: req.dailyDeductionCap ?? existing.dailyDeductionCap,
             weeklyDeductionCap: req.weeklyDeductionCap ?? existing.weeklyDeductionCap,
-            settings: existing.settings,
+            settings: mergedSettings,
             createdAt: existing.createdAt,
             deletedAt: existing.deletedAt
         )
@@ -443,6 +448,30 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
         )
         users[kid.id] = kid
         return kid
+    }
+
+    public func updateKid(_ req: UpdateKidRequest) async throws -> AppUser {
+        guard let existing = users[req.kidUserId] else { throw APIError.notFound }
+        guard existing.role == .child else { throw APIError.notFound }
+        let updated = AppUser(
+            id: existing.id,
+            familyId: existing.familyId,
+            role: existing.role,
+            displayName: req.displayName ?? existing.displayName,
+            avatar: req.avatar ?? existing.avatar,
+            color: req.color ?? existing.color,
+            complexityTier: req.complexityTier ?? existing.complexityTier,
+            birthdate: existing.birthdate,
+            appleSub: existing.appleSub,
+            devicePairingCode: existing.devicePairingCode,
+            devicePairingExpiresAt: existing.devicePairingExpiresAt,
+            cachedBalance: existing.cachedBalance,
+            cachedBalanceAsOfTxnId: existing.cachedBalanceAsOfTxnId,
+            createdAt: existing.createdAt,
+            deletedAt: existing.deletedAt
+        )
+        users[existing.id] = updated
+        return updated
     }
 
     public func pairDevice(_ req: PairDeviceRequest) async throws -> PairingCode {
@@ -637,5 +666,60 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
 
     public func registerAPNSToken(_ token: String, appBundle: String) async throws {
         // no-op in mock
+    }
+
+    // MARK: - Read / List
+
+    public func listFamilyUsers(familyId: UUID) async throws -> [AppUser] {
+        users.values.filter { $0.familyId == familyId }
+    }
+
+    public func listChoreTemplates(familyId: UUID) async throws -> [ChoreTemplate] {
+        templates.values.filter { $0.familyId == familyId && $0.active }
+    }
+
+    public func listTodayChoreInstances(familyId: UUID) async throws -> [ChoreInstance] {
+        let today = Self.isoDate(from: Date())
+        // Filter instances whose owning user belongs to the family
+        let familyUserIds = Set(users.values.filter { $0.familyId == familyId }.map { $0.id })
+        return instances.values.filter { familyUserIds.contains($0.userId) && $0.scheduledFor == today }
+    }
+
+    public func listPendingApprovals(familyId: UUID) async throws -> [ChoreInstance] {
+        let familyUserIds = Set(users.values.filter { $0.familyId == familyId }.map { $0.id })
+        return instances.values.filter {
+            familyUserIds.contains($0.userId) &&
+            ($0.status == .completed || $0.status == .pending)
+        }
+    }
+
+    public func listTransactions(userId: UUID, limit: Int) async throws -> [PointTransaction] {
+        let sorted = transactions.values
+            .filter { $0.userId == userId }
+            .sorted { $0.createdAt > $1.createdAt }
+        return Array(sorted.prefix(limit))
+    }
+
+    public func listRewards(familyId: UUID) async throws -> [Reward] {
+        rewards.values.filter { $0.familyId == familyId && $0.active }
+    }
+
+    public func listPendingRedemptions(familyId: UUID) async throws -> [RedemptionRequest] {
+        redemptions.values.filter { $0.familyId == familyId && $0.status == .pending }
+    }
+
+    public func listStreaks(familyId: UUID) async throws -> [Streak] {
+        // No streaks in seed data; returns empty array.
+        []
+    }
+
+    public func fetchFamily(id: UUID) async throws -> Family {
+        guard let family = families[id] else { throw APIError.notFound }
+        return family
+    }
+
+    public func fetchSubscription(familyId: UUID) async throws -> Subscription? {
+        guard subscription.familyId == familyId else { return nil }
+        return subscription
     }
 }

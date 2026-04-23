@@ -35,6 +35,21 @@ public final class FamilyRepository: @unchecked Sendable {
         users = MockAPIClient.seedUsers
     }
 
+    /// Fetch family and its members from the cloud DB. Used in production app launch.
+    public func load(familyId: UUID) async {
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
+        do {
+            async let fetchedFamily = apiClient.fetchFamily(id: familyId)
+            async let fetchedUsers  = apiClient.listFamilyUsers(familyId: familyId)
+            family = try await fetchedFamily
+            users  = try await fetchedUsers
+        } catch {
+            self.error = error
+        }
+    }
+
     // MARK: - Family mutations
 
     public func createFamily(_ req: CreateFamilyRequest) async {
@@ -82,6 +97,18 @@ public final class FamilyRepository: @unchecked Sendable {
         do {
             let kid = try await apiClient.addKid(req)
             users.append(kid)
+        } catch {
+            self.error = error
+        }
+    }
+
+    public func updateKid(_ req: UpdateKidRequest) async {
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
+        do {
+            let updated = try await apiClient.updateKid(req)
+            applyUserUpdate(updated)
         } catch {
             self.error = error
         }

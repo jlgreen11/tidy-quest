@@ -52,6 +52,27 @@ public final class ChoreRepository: @unchecked Sendable {
         self.streaks = streaks
     }
 
+    // MARK: - Cloud load
+
+    /// Fetch templates, today's instances, pending approvals, and streaks from the cloud DB.
+    public func load(familyId: UUID) async {
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
+        do {
+            async let fetchedTemplates  = apiClient.listChoreTemplates(familyId: familyId)
+            async let fetchedInstances  = apiClient.listTodayChoreInstances(familyId: familyId)
+            async let fetchedApprovals  = apiClient.listPendingApprovals(familyId: familyId)
+            async let fetchedStreaks     = apiClient.listStreaks(familyId: familyId)
+            templates        = try await fetchedTemplates
+            todayInstances   = try await fetchedInstances
+            pendingApprovals = try await fetchedApprovals
+            streaks          = try await fetchedStreaks
+        } catch {
+            self.error = error
+        }
+    }
+
     // MARK: - Template mutations
 
     public func createTemplate(_ req: CreateChoreTemplateRequest) async {

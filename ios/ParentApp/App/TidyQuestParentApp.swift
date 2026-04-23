@@ -61,6 +61,11 @@ struct TidyQuestParentApp: App {
                 }
                 #else
                 await authController.restoreSession()
+                if let familyId = authController.currentUser?.familyId {
+                    async let _ = familyRepo.load(familyId: familyId)
+                    async let _ = choreRepo.load(familyId: familyId)
+                    async let _ = rewardRepo.load(familyId: familyId)
+                }
                 #endif
             }
             // Deep-link stub — real wiring in Act 4

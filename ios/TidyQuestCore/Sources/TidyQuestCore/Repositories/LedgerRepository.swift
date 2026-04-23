@@ -31,6 +31,54 @@ public final class LedgerRepository: @unchecked Sendable {
         self.apiClient = apiClient
     }
 
+    // MARK: - Cloud load
+
+    /// Fetch recent transactions and derive balances for all kids in a family.
+    /// Requires the caller to supply the list of kid user IDs (from FamilyRepository).
+    public func load(familyId: UUID, kidIds: [UUID], transactionLimit: Int = 50) async {
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
+        do {
+            try await withThrowingTaskGroup(of: [PointTransaction].self) { group in
+                for kidId in kidIds {
+                    group.addTask { [apiClient] in
+                        try await apiClient.listTransactions(userId: kidId, limit: transactionLimit)
+                    }
+                }
+                for try await txns in group {
+                    for txn in txns {
+                        if !transactions.contains(where: { $0.id == txn.id }) {
+                            transactions.append(txn)
+                        }
+                    }
+                }
+            }
+            // Recompute balances from loaded transactions
+            for kidId in kidIds {
+                let total = transactions
+                    .filter { $0.userId == kidId && $0.reversedByTransactionId == nil }
+                    .reduce(0) { $0 + $1.amount }
+                balances[kidId] = total
+            }
+        } catch {
+            self.error = error
+        }
+    }
+
+    /// Fetch transactions for a single user (e.g., drill-down ledger view).
+    public func loadTransactions(userId: UUID, limit: Int = 50) async {
+        isLoading = true
+        error = nil
+        defer { isLoading = false }
+        do {
+            let txns = try await apiClient.listTransactions(userId: userId, limit: limit)
+            setTransactions(txns, for: userId)
+        } catch {
+            self.error = error
+        }
+    }
+
     // MARK: - Mutations
 
     public func issueFine(_ req: IssueFineRequest) async {

@@ -14,6 +14,7 @@ public protocol APIClient: Sendable {
     // MARK: - Users
 
     func addKid(_ req: AddKidRequest) async throws -> AppUser
+    func updateKid(_ req: UpdateKidRequest) async throws -> AppUser
     func pairDevice(_ req: PairDeviceRequest) async throws -> PairingCode
     func claimPairing(_ req: ClaimPairingRequest) async throws -> DeviceClaimResult
     func revokeDevice(_ req: RevokeDeviceRequest) async throws
@@ -46,4 +47,17 @@ public protocol APIClient: Sendable {
     // MARK: - Notifications
 
     func registerAPNSToken(_ token: String, appBundle: String) async throws
+
+    // MARK: - Read / List
+
+    func listFamilyUsers(familyId: UUID) async throws -> [AppUser]
+    func listChoreTemplates(familyId: UUID) async throws -> [ChoreTemplate]
+    func listTodayChoreInstances(familyId: UUID) async throws -> [ChoreInstance]
+    func listPendingApprovals(familyId: UUID) async throws -> [ChoreInstance]
+    func listTransactions(userId: UUID, limit: Int) async throws -> [PointTransaction]
+    func listRewards(familyId: UUID) async throws -> [Reward]
+    func listPendingRedemptions(familyId: UUID) async throws -> [RedemptionRequest]
+    func listStreaks(familyId: UUID) async throws -> [Streak]
+    func fetchFamily(id: UUID) async throws -> Family
+    func fetchSubscription(familyId: UUID) async throws -> Subscription?
 }
