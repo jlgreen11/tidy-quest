@@ -176,7 +176,11 @@ struct MockAPIClientTests {
 
     @Test("updateSubscription returns current subscription")
     func updateSubscriptionReturnsTrial() async throws {
-        let sub = try await mock.updateSubscription("mock-receipt")
+        let receipt = StoreKit2Receipt(
+            transactionId: "mock-receipt",
+            productId: "com.jlgreen11.tidyquest.monthly"
+        )
+        let sub = try await mock.updateSubscription(receipt)
         #expect(sub.status == .trial)
         #expect(sub.familyId == MockAPIClient.SeedID.family)
     }

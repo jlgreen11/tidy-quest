@@ -96,9 +96,11 @@ struct CoParentInviteStep: View {
         errorMessage = nil
         defer { isSending = false }
 
-        // TODO: Call familyRepo.inviteCoParent(contact: draft.coParentContact) once
-        // FamilyRepository exposes that method (agent E3).
-        // For now, simulate a short delay and proceed.
+        // Co-parent invitation is deferred to v0.2 (see PLAN_v0.1.md §4.0 step 3
+        // — "optional co-parent invite, 30s, skippable"). No backend endpoint
+        // ships in v0.1. The entered contact lives in `draft.coParentContact`
+        // which is captured client-side only; when the v0.2 endpoint lands,
+        // add `familyRepo.inviteCoParent(contact:)` and call it here.
         try? await Task.sleep(for: .milliseconds(300))
 
         onContinue()

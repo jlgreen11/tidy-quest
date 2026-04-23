@@ -197,9 +197,8 @@ public final class SupabaseAPIClient: APIClient {
 
     // MARK: - Subscription
 
-    public func updateSubscription(_ receipt: String) async throws -> Subscription {
-        struct Body: Encodable { let receipt: String }
-        return try await invoke(function: "subscription-update", body: Body(receipt: receipt))
+    public func updateSubscription(_ receipt: StoreKit2Receipt) async throws -> Subscription {
+        try await invoke(function: "subscription-update", body: receipt)
     }
 
     // MARK: - Notifications

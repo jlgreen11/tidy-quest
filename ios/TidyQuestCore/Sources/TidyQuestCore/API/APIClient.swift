@@ -42,7 +42,7 @@ public protocol APIClient: Sendable {
 
     // MARK: - Subscription
 
-    func updateSubscription(_ receipt: String) async throws -> Subscription
+    func updateSubscription(_ receipt: StoreKit2Receipt) async throws -> Subscription
 
     // MARK: - Notifications
 

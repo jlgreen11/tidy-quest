@@ -112,12 +112,14 @@ struct OnboardingCompleteStep: View {
         isMarkingComplete = true
         defer { isMarkingComplete = false }
 
-        // Mark the family as onboarded. UpdateFamilyRequest does not currently have a
-        // settings/onboarded_at parameter — calling with only familyId triggers a no-op
-        // update that at minimum confirms the family record is reachable.
-        // TODO: Once UpdateFamilyRequest gains a `settings` field, pass:
-        //   settings: ["onboarded_at": ISO8601DateFormatter().string(from: Date())]
-        let req = UpdateFamilyRequest(familyId: familyId)
+        // Stamp onboarded_at into the family.settings jsonb column. The backend
+        // merges this key with any existing settings without touching other
+        // fields.
+        let onboardedAt = ISO8601DateFormatter().string(from: Date())
+        let req = UpdateFamilyRequest(
+            familyId: familyId,
+            settings: ["onboarded_at": AnyCodable(onboardedAt)]
+        )
         await familyRepo.updateFamily(req)
 
         // Proceed regardless of update result — don't block the user on a settings stamp.

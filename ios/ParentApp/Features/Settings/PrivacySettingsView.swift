@@ -113,15 +113,19 @@ struct PrivacySettingsView: View {
         errorMessage = nil
         defer { isDeleting = false }
 
-        // TODO: call familyRepo.deleteFamily(DeleteFamilyRequest(...)) once FamilyRepository
-        // exposes a deleteFamily method. Until then, use updateFamily as a connectivity
-        // smoke-test; actual deletion requires the repository layer addition.
-        // TODO: supply a real App Attest token when the attestation service is wired.
-        let req = UpdateFamilyRequest(familyId: family.id)
-        await familyRepo.updateFamily(req)
-
-        if familyRepo.error != nil {
-            errorMessage = familyRepo.error?.localizedDescription ?? "Failed to delete. Please try again."
+        // TODO (v0.2): supply a real App Attest token from the iOS attestation
+        // service. v0.1 ships with a mock token; the backend will reject the
+        // call in production once App Attest verification is enforced server-
+        // side. See PLAN_v0.1.md — App Attest is scoped to v0.2.
+        let mockAppAttestToken = "mock-app-attest-\(UUID().uuidString)"
+        let req = DeleteFamilyRequest(
+            familyId: family.id,
+            appAttestToken: mockAppAttestToken
+        )
+        do {
+            try await familyRepo.deleteFamily(req)
+        } catch {
+            errorMessage = error.localizedDescription
         }
         showDeleteConfirmation = false
         deleteConfirmText = ""

@@ -135,14 +135,17 @@ struct ReminderCadenceStep: View {
         isSaving = true
         defer { isSaving = false }
 
-        // UpdateFamilyRequest does not have reminder fields; they go in the settings jsonb.
-        // The available fields are name, timezone, leaderboardEnabled, siblingLedgerVisible,
-        // dailyDeductionCap, weeklyDeductionCap — no settings blob parameter.
-        // TODO: Once UpdateFamilyRequest gains a `settings` field (agent E3 or schema update),
-        // pass morning/afternoon reminder times as:
-        //   settings: ["morning_reminder": "\(draft.morningReminderHour):\(String(format: "%02d", draft.morningReminderMinute))",
-        //              "afternoon_reminder": "\(draft.afternoonReminderHour):\(String(format: "%02d", draft.afternoonReminderMinute))"]
-        let req = UpdateFamilyRequest(familyId: familyId)
+        // Persist the reminder times into the family.settings jsonb column.
+        // The backend merges these keys with any existing settings.
+        let morning = "\(String(format: "%02d", draft.morningReminderHour)):\(String(format: "%02d", draft.morningReminderMinute))"
+        let afternoon = "\(String(format: "%02d", draft.afternoonReminderHour)):\(String(format: "%02d", draft.afternoonReminderMinute))"
+        let req = UpdateFamilyRequest(
+            familyId: familyId,
+            settings: [
+                "morning_reminder": AnyCodable(morning),
+                "afternoon_reminder": AnyCodable(afternoon)
+            ]
+        )
         await familyRepo.updateFamily(req)
 
         if let err = familyRepo.error {

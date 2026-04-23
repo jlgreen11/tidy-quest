@@ -129,11 +129,21 @@ struct SubscriptionGateStep: View {
         isPurchasing = true
         defer { isPurchasing = false }
 
-        // In production: call StoreKit 2 Product.purchase() and pass the real receipt.
-        // The mock server accepts any receipt starting with "mock-trial-".
-        let mockReceipt = "mock-trial-\(UUID().uuidString)"
+        // TODO (v0.2): wire real StoreKit 2 Product.purchase() and pass the
+        // decoded JWS receipt. For v0.1 we send a trial-mock payload that
+        // matches the backend's `StoreKit2ReceiptSchema`. The mock edge function
+        // accepts any payload with transactionId + productId.
+        let productId = (selectedProduct ?? .monthly).rawValue
+        let receipt = StoreKit2Receipt(
+            payloadType: "storekit2-receipt",
+            transactionId: "mock-trial-\(UUID().uuidString)",
+            productId: productId,
+            purchaseDate: ISO8601DateFormatter().string(from: Date()),
+            expiresDate: nil,
+            environment: "Sandbox"
+        )
         do {
-            _ = try await apiClient.updateSubscription(mockReceipt)
+            _ = try await apiClient.updateSubscription(receipt)
             onContinue()
         } catch {
             errorMessage = error.localizedDescription

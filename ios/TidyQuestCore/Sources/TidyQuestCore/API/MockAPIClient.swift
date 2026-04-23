@@ -658,7 +658,7 @@ public final class MockAPIClient: APIClient, @unchecked Sendable {
 
     // MARK: - Subscription
 
-    public func updateSubscription(_ receipt: String) async throws -> Subscription {
+    public func updateSubscription(_ receipt: StoreKit2Receipt) async throws -> Subscription {
         return subscription
     }
 
