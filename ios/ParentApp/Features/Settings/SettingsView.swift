@@ -31,13 +31,13 @@ struct SettingsView: View {
 
                 Section("Chores & Rewards") {
                     NavigationLink {
-                        ChoreDefaultsSettingsView(choreRepo: choreRepo)
+                        ChoreDefaultsSettingsView(familyRepo: familyRepo)
                     } label: {
                         SettingsRow(icon: "checkmark.circle.fill", color: .green, label: "Chore defaults")
                     }
 
                     NavigationLink {
-                        RewardDefaultsSettingsView(rewardRepo: rewardRepo)
+                        RewardDefaultsSettingsView(familyRepo: familyRepo)
                     } label: {
                         SettingsRow(icon: "gift.fill", color: .pink, label: "Reward defaults")
                     }
@@ -45,7 +45,7 @@ struct SettingsView: View {
 
                 Section("Communication") {
                     NavigationLink {
-                        NotificationsSettingsView()
+                        NotificationsSettingsView(familyRepo: familyRepo)
                     } label: {
                         SettingsRow(icon: "bell.fill", color: .red, label: "Notifications")
                     }

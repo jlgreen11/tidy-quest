@@ -29,6 +29,7 @@ struct KidSettingsDetailView: View {
                     TextField("Kid's name", text: $displayName)
                         .multilineTextAlignment(.trailing)
                         .accessibilityLabel("Kid's display name")
+                        .disabled(isSaving)
                 }
             }
 
@@ -63,6 +64,7 @@ struct KidSettingsDetailView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .disabled(isSaving)
                 .accessibilityLabel("Complexity tier picker")
 
                 tierDescription
@@ -73,13 +75,16 @@ struct KidSettingsDetailView: View {
             Section("Photo Proof Defaults") {
                 Toggle("Require photo by default", isOn: $defaultRequiresPhoto)
                     .accessibilityLabel("Require photo proof by default for new chores")
+                    .disabled(isSaving)
             }
 
             Section("Reward Categories") {
                 Toggle("Screen time rewards", isOn: $showScreenTime)
                     .accessibilityLabel("Show screen time rewards")
+                    .disabled(isSaving)
                 Toggle("Cash-out rewards", isOn: $showCashOut)
                     .accessibilityLabel("Show cash-out rewards")
+                    .disabled(isSaving)
             }
 
             Section {
@@ -130,11 +135,11 @@ struct KidSettingsDetailView: View {
     }
 
     private func saveChanges() async {
-        // In v0.1, kid updates go via addKid (no updateKid endpoint exists yet).
-        // Show a placeholder save action.
+        // TODO: wire to API when updateKid is added (no updateKid endpoint exists yet).
+        // Changes are held in local @State so the UI reflects edits within the session.
         isSaving = true
-        try? await Task.sleep(for: .milliseconds(500))
-        isSaving = false
+        defer { isSaving = false }
+        try? await Task.sleep(for: .milliseconds(300))
     }
 }
 

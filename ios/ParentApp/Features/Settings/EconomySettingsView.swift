@@ -13,9 +13,24 @@ struct EconomySettingsView: View {
     @State private var dailyCap: Double = 50
     @State private var weeklyCap: Double = 150
     @State private var isSaving: Bool = false
+    @State private var errorMessage: String? = nil
+
+    // Snapshots for rollback
+    @State private var savedBandLow: Double = 250
+    @State private var savedBandHigh: Double = 500
+    @State private var savedDailyCap: Double = 50
+    @State private var savedWeeklyCap: Double = 150
 
     var body: some View {
         Form {
+            if let errorMessage {
+                ErrorBanner(message: errorMessage) {
+                    Task { await saveChanges() }
+                }
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+            }
+
             Section {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
@@ -41,6 +56,7 @@ struct EconomySettingsView: View {
                     }
                     .accessibilityLabel("Weekly earnings band lower bound: \(Int(bandLow)) points")
                     .accessibilityValue("\(Int(bandLow)) points")
+                    .disabled(isSaving)
 
                     Text("Upper bound")
                         .font(.caption)
@@ -57,6 +73,7 @@ struct EconomySettingsView: View {
                     }
                     .accessibilityLabel("Weekly earnings band upper bound: \(Int(bandHigh)) points")
                     .accessibilityValue("\(Int(bandHigh)) points")
+                    .disabled(isSaving)
                 }
                 .padding(.vertical, 4)
             } header: {
@@ -83,6 +100,7 @@ struct EconomySettingsView: View {
                     }
                     .accessibilityLabel("Daily deduction cap: \(Int(dailyCap)) points per day")
                     .accessibilityValue("\(Int(dailyCap))")
+                    .disabled(isSaving)
                 }
                 .padding(.vertical, 4)
 
@@ -103,6 +121,7 @@ struct EconomySettingsView: View {
                     }
                     .accessibilityLabel("Weekly deduction cap: \(Int(weeklyCap)) points per week")
                     .accessibilityValue("\(Int(weeklyCap))")
+                    .disabled(isSaving)
                 }
                 .padding(.vertical, 4)
             } header: {
@@ -119,6 +138,7 @@ struct EconomySettingsView: View {
                         Spacer()
                         if isSaving {
                             ProgressView()
+                                .accessibilityLabel("Saving")
                         } else {
                             Text("Save Economy Settings")
                                 .font(.body.weight(.semibold))
@@ -140,7 +160,9 @@ struct EconomySettingsView: View {
     private func loadFromRepo() {
         guard let family = familyRepo.family else { return }
         dailyCap = Double(family.dailyDeductionCap)
+        savedDailyCap = dailyCap
         weeklyCap = Double(family.weeklyDeductionCap)
+        savedWeeklyCap = weeklyCap
         if let bandStr = family.weeklyBandTarget {
             let stripped = bandStr.trimmingCharacters(in: CharacterSet(charactersIn: "[(])"))
             let parts = stripped.split(separator: ",")
@@ -148,7 +170,9 @@ struct EconomySettingsView: View {
                let lo = Double(parts[0].trimmingCharacters(in: .whitespaces)),
                let hi = Double(parts[1].trimmingCharacters(in: .whitespaces)) {
                 bandLow = lo
+                savedBandLow = lo
                 bandHigh = hi
+                savedBandHigh = hi
             }
         }
     }
@@ -156,13 +180,31 @@ struct EconomySettingsView: View {
     private func saveChanges() async {
         guard let family = familyRepo.family else { return }
         isSaving = true
+        errorMessage = nil
         defer { isSaving = false }
+
+        // TODO: wire weeklyBandTarget when UpdateFamilyRequest gains that field.
         let req = UpdateFamilyRequest(
             familyId: family.id,
             dailyDeductionCap: Int(dailyCap),
             weeklyDeductionCap: Int(weeklyCap)
         )
         await familyRepo.updateFamily(req)
+
+        if familyRepo.error != nil {
+            // Roll back UI to last saved values
+            bandLow = savedBandLow
+            bandHigh = savedBandHigh
+            dailyCap = savedDailyCap
+            weeklyCap = savedWeeklyCap
+            errorMessage = familyRepo.error?.localizedDescription ?? "Failed to save. Please try again."
+        } else {
+            // Commit snapshots
+            savedBandLow = bandLow
+            savedBandHigh = bandHigh
+            savedDailyCap = dailyCap
+            savedWeeklyCap = weeklyCap
+        }
     }
 }
 
