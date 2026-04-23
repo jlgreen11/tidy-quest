@@ -12,6 +12,8 @@ let package = Package(
             name: "TidyQuestCore",
             targets: ["TidyQuestCore"]
         )
+        // TidyQuestCoreModels is Xcode-only (SwiftData macros require Xcode macro plugin binary).
+        // UI agents (C1-C4) add Sources/TidyQuestCore/Models/ directly to their Xcode targets.
     ],
     dependencies: [
         .package(
@@ -33,6 +35,10 @@ let package = Package(
                 .product(name: "Supabase", package: "supabase-swift")
             ],
             path: "Sources/TidyQuestCore",
+            // Models/ uses SwiftData macros that require Xcode's macro plugin binary.
+            // Excluded here so `swift build` / `swift test` succeed in CI.
+            // Xcode picks up Models/ automatically via the TidyQuestCoreModels target.
+            exclude: ["Models"],
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
