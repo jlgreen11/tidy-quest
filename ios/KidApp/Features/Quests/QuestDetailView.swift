@@ -258,8 +258,8 @@ struct QuestDetailView: View {
     private var ringColor: Color {
         switch tier {
         case .starter: .yellow
-        case .standard: Color(hex: "4D96FF")
-        case .advanced: Color(hex: "B983FF")
+        case .standard: Color(hex: "4D96FF") ?? .blue
+        case .advanced: Color(hex: "B983FF") ?? .purple
         }
     }
 }

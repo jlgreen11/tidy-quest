@@ -51,7 +51,7 @@ struct ChoreTile: View {
         if isMissed    { return .gray }
         if isRejected  { return .red.opacity(0.7) }
         if isCompleted { return .green }
-        return Color(hex: "4D96FF") // sky blue — default pending
+        return Color(hex: "4D96FF") ?? .blue // sky blue — default pending
     }
 
     private var minSize: CGFloat { tier.minTapTarget }
@@ -186,13 +186,13 @@ struct ChoreTile: View {
                     if UIImage(named: assetName) == nil {
                         Image(systemName: template.icon)
                             .font(.system(size: 40))
-                            .foregroundStyle(Color(hex: "4D96FF"))
+                            .foregroundStyle(Color(hex: "4D96FF") ?? .blue)
                     }
                 }
         } else {
             let iconColor: Color = tier == .advanced
-                ? Color(hex: template.icon.isEmpty ? "6C757D" : "6C757D").opacity(0.7)
-                : Color(hex: "4D96FF")
+                ? (Color(hex: "6C757D") ?? .gray).opacity(0.7)
+                : Color(hex: "4D96FF") ?? .blue
 
             Image(systemName: template.icon)
                 .font(.system(size: tier == .standard ? 32 : 26))

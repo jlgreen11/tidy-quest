@@ -14,7 +14,7 @@ struct KidAvatar: View {
     }
 
     private var borderColor: Color {
-        kidColor.map { Color(hex: $0.hex) } ?? .secondary
+        kidColor.map { Color(hex: $0.hex) ?? .secondary } ?? .secondary
     }
 
     private var pairedIcon: String {

@@ -236,7 +236,7 @@ private struct KidListRow: View {
     }
 
     private var kidColor: Color {
-        Color(hex: kid.color.trimmingCharacters(in: .init(charactersIn: "#")))
+        Color(hex: kid.color.trimmingCharacters(in: .init(charactersIn: "#"))) ?? .accentColor
     }
 
     var body: some View {

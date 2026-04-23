@@ -335,7 +335,7 @@ private struct KidActivityCard: View {
     }
 
     private var kidColor: Color {
-        Color(hex: kid.color.trimmingCharacters(in: .init(charactersIn: "#")))
+        Color(hex: kid.color.trimmingCharacters(in: .init(charactersIn: "#"))) ?? .accentColor
     }
 
     private var completedCount: Int {
@@ -407,7 +407,7 @@ private struct LedgerRow: View {
     let kid: AppUser?
 
     private var kidColor: Color {
-        Color(hex: (kid?.color ?? "#6C757D").trimmingCharacters(in: .init(charactersIn: "#")))
+        Color(hex: (kid?.color ?? "#6C757D").trimmingCharacters(in: .init(charactersIn: "#"))) ?? .gray
     }
 
     private var amountColor: Color {

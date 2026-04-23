@@ -11,7 +11,7 @@ struct MeView: View {
     let choreRepository: ChoreRepository
     let ledgerRepository: LedgerRepository
 
-    @Environment(\.tierTheme) private var tier
+    @Environment(\.tierTheme) private var environmentTier
     @Environment(\.colorScheme) private var colorScheme
 
     // MARK: - Local state
@@ -19,11 +19,43 @@ struct MeView: View {
     @State private var soundEnabled: Bool = true
     @State private var showLedger = false
 
+    #if DEBUG
+    /// DEBUG-only: overrides the kid's real tier for visual QA.
+    /// nil = use the environment tier from the kid's ComplexityTier.
+    @State private var debugTierOverride: Tier? = nil
+    #endif
+
+    // MARK: - Effective tier
+
+    /// The tier used for rendering — honours the DEBUG switcher when set.
+    private var tier: Tier {
+        #if DEBUG
+        return debugTierOverride ?? environmentTier
+        #else
+        return environmentTier
+        #endif
+    }
+
     // MARK: - Body
 
     var body: some View {
         NavigationStack {
             List {
+                #if DEBUG
+                // DEBUG banner: shows when the tier switcher is active
+                if let override = debugTierOverride {
+                    Section {
+                        Label(
+                            "DEBUG: Tier overridden to \(override.debugLabel)",
+                            systemImage: "hammer.fill"
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .accessibilityHidden(true)
+                    }
+                }
+                #endif
+
                 // Avatar section
                 avatarSection
 
@@ -53,7 +85,24 @@ struct MeView: View {
             }
             .navigationTitle("Me")
             .navigationBarTitleDisplayMode(.large)
+            #if DEBUG
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        debugTierOverride = (debugTierOverride ?? environmentTier).nextDebugTier
+                    } label: {
+                        Label(
+                            "Switch tier",
+                            systemImage: "arrow.triangle.2.circlepath"
+                        )
+                        .foregroundStyle(.orange)
+                    }
+                    .accessibilityLabel("DEBUG: cycle complexity tier")
+                }
+            }
+            #endif
         }
+        .tierTheme(tier)
     }
 
     // MARK: - Avatar section
@@ -63,14 +112,14 @@ struct MeView: View {
             HStack(spacing: 16) {
                 ZStack {
                     Circle()
-                        .strokeBorder(Color(hex: kid.color), lineWidth: tier == .starter ? 5 : 3)
+                        .strokeBorder(Color(hex: kid.color) ?? .accentColor, lineWidth: tier == .starter ? 5 : 3)
                         .frame(
                             width: tier == .starter ? 88 : (tier == .standard ? 72 : 60),
                             height: tier == .starter ? 88 : (tier == .standard ? 72 : 60)
                         )
                     Image(systemName: "person.circle.fill")
                         .font(.system(size: tier == .starter ? 64 : (tier == .standard ? 52 : 44)))
-                        .foregroundStyle(Color(hex: kid.color))
+                        .foregroundStyle(Color(hex: kid.color) ?? .accentColor)
                 }
                 .accessibilityHidden(true)
 
@@ -286,6 +335,30 @@ struct AchievementBadge: View {
         .accessibilityLabel("\(badge.title). \(badge.description). \(badge.earned ? "Earned!" : "Not yet earned.")")
     }
 }
+
+// MARK: - DEBUG Tier helpers
+
+#if DEBUG
+private extension Tier {
+    /// Human-readable label used by the DEBUG tier switcher banner.
+    var debugLabel: String {
+        switch self {
+        case .starter:  "Starter"
+        case .standard: "Standard"
+        case .advanced: "Advanced"
+        }
+    }
+
+    /// Cycles Starter → Standard → Advanced → Starter.
+    var nextDebugTier: Tier {
+        switch self {
+        case .starter:  .standard
+        case .standard: .advanced
+        case .advanced: .starter
+        }
+    }
+}
+#endif
 
 // MARK: - Preview
 

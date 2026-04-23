@@ -203,7 +203,7 @@ struct RewardsView: View {
             .background(.regularMaterial, in: Capsule())
             .accessibilityLabel("\(balance) points")
         } else {
-            JarProgressView(balance: balance, kidColor: Color(hex: kid.color))
+            JarProgressView(balance: balance, kidColor: Color(hex: kid.color) ?? .accentColor)
                 .scaleEffect(0.55)
                 .frame(width: 60, height: 44)
         }

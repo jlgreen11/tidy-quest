@@ -68,7 +68,7 @@ public enum Tier: Sendable {
     /// Returns the SwiftUI Color for a given KidColor in this tier's palette.
     /// Tier does not alter the color itself; it gates whether extra flourishes render.
     public func primaryColor(for kidColor: KidColor) -> Color {
-        Color(hex: kidColor.hex)
+        Color(hex: kidColor.hex) ?? .accentColor
     }
 }
 
@@ -85,9 +85,11 @@ public enum MotionDensity: Sendable {
 
 extension Color {
     /// Initialise a Color from a 6-digit hex string (with or without leading `#`).
-    public init(hex: String) {
-        let hex = hex.trimmingCharacters(in: .init(charactersIn: "#"))
-        let int = UInt64(hex, radix: 16) ?? 0
+    /// Returns `nil` for any input that does not parse as a valid 6-digit hex value,
+    /// making malformed strings explicit at the call site rather than silently returning black.
+    public init?(hex: String) {
+        let stripped = hex.trimmingCharacters(in: .init(charactersIn: "#"))
+        guard stripped.count == 6, let int = UInt64(stripped, radix: 16) else { return nil }
         let r = Double((int >> 16) & 0xFF) / 255
         let g = Double((int >>  8) & 0xFF) / 255
         let b = Double( int        & 0xFF) / 255

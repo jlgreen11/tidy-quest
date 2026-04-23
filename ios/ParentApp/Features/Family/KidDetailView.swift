@@ -18,7 +18,7 @@ struct KidDetailView: View {
     }
 
     private var kidColor: Color {
-        Color(hex: kid.color.trimmingCharacters(in: .init(charactersIn: "#")))
+        Color(hex: kid.color.trimmingCharacters(in: .init(charactersIn: "#"))) ?? .accentColor
     }
 
     private var todayInstances: [ChoreInstance] {

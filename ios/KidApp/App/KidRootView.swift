@@ -95,7 +95,7 @@ struct KidRootView: View {
             }
             .tag(Tab.me)
         }
-        .tint(Color(hex: kid.color))
+        .tint(Color(hex: kid.color) ?? .accentColor)
         .fineBottomSheet(
             fine: $pendingFine,
             parentName: parentName,
@@ -104,6 +104,17 @@ struct KidRootView: View {
         .task {
             // Load family data to resolve parentName
             await familyRepository.loadFamilyIfNeeded()
+
+            // Seed today's chore instances and templates for this kid.
+            // loadToday(for:) equivalent — populates ChoreRepository from mock data.
+            await choreRepository.loadTodayIfNeeded(for: kid.id)
+
+            // Seed ledger transactions for this kid.
+            // loadTransactions(userId:) equivalent — no-op if already set.
+            ledgerRepository.seedTransactionsIfNeeded(for: kid)
+
+            // Reward catalog is seeded in RewardRepository.init; no action needed
+            // (loadCatalog(familyId:) equivalent is covered by init-time seed).
 
             // Load quests
             if let familyId = kid.familyId {
@@ -135,6 +146,65 @@ extension FamilyRepository {
         if family == nil {
             loadSeedData()
         }
+        #endif
+    }
+}
+
+// MARK: - ChoreRepository extension — load today if needed
+
+extension ChoreRepository {
+    /// In DEBUG builds, seeds today's instances for the given kid from MockAPIClient data.
+    /// Equivalent of a production `loadToday(for:)` call.
+    /// No-op if instances are already loaded (idempotent).
+    @MainActor
+    func loadTodayIfNeeded(for userId: UUID) async {
+        #if DEBUG
+        guard todayInstances.filter({ $0.userId == userId }).isEmpty else { return }
+        // Load matching seed templates and build pending instances for today
+        let today: String = {
+            let f = DateFormatter()
+            f.dateFormat = "yyyy-MM-dd"
+            f.timeZone = TimeZone(identifier: "America/Los_Angeles")
+            return f.string(from: Date())
+        }()
+        // Merge with seed instances from MockAPIClient that belong to this kid
+        let seedForKid = MockAPIClient.seedTemplates
+            .filter { $0.targetUserIds.contains(userId) }
+        // Prefer existing seed instances; generate any missing ones as pending
+        let existingIds = Set(todayInstances.map { $0.templateId })
+        let newInstances: [ChoreInstance] = seedForKid
+            .filter { !existingIds.contains($0.id) }
+            .map { template in
+                ChoreInstance(
+                    id: UUID(),
+                    templateId: template.id,
+                    userId: userId,
+                    scheduledFor: today,
+                    windowStart: nil, windowEnd: nil,
+                    status: .pending,
+                    completedAt: nil, approvedAt: nil,
+                    proofPhotoId: nil, awardedPoints: nil,
+                    completedByDevice: nil, completedAsUser: nil,
+                    createdAt: Date()
+                )
+            }
+        // Note: ChoreRepository.templates cannot be seeded from outside TidyQuestCore
+        // (private(set) across modules). HomeView falls back to MockAPIClient.seedTemplates
+        // in DEBUG builds when choreRepository.templates is empty.
+        loadSeedInstances(todayInstances + newInstances)
+        #endif
+    }
+}
+
+// MARK: - LedgerRepository extension — seed transactions if needed
+
+extension LedgerRepository {
+    /// In DEBUG builds, seeds the kid's balance and a minimal transaction history
+    /// if nothing has been set yet. Equivalent of a production `loadTransactions(userId:)`.
+    func seedTransactionsIfNeeded(for kid: AppUser) {
+        #if DEBUG
+        guard balance(for: kid.id) == 0 && transactions(for: kid.id).isEmpty else { return }
+        setBalance(kid.cachedBalance, for: kid.id)
         #endif
     }
 }

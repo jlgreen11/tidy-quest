@@ -62,7 +62,16 @@ struct HomeView: View {
     }
 
     private var templates: [UUID: ChoreTemplate] {
-        Dictionary(uniqueKeysWithValues: choreRepository.templates.map { ($0.id, $0) })
+        #if DEBUG
+        // ChoreRepository.templates is only populated by mutations; there is no fetch
+        // endpoint in the API protocol. In DEBUG builds fall back to MockAPIClient seed
+        // templates so ChoreTile renders without modifying TidyQuestCore.
+        let repoTemplates = choreRepository.templates
+        let source = repoTemplates.isEmpty ? MockAPIClient.seedTemplates : repoTemplates
+        return Dictionary(uniqueKeysWithValues: source.map { ($0.id, $0) })
+        #else
+        return Dictionary(uniqueKeysWithValues: choreRepository.templates.map { ($0.id, $0) })
+        #endif
     }
 
     // MARK: - Body
@@ -173,7 +182,7 @@ struct HomeView: View {
             // Starter: jar metaphor in nav bar (compact)
             JarProgressView(
                 balance: balance,
-                kidColor: Color(hex: kid.color)
+                kidColor: Color(hex: kid.color) ?? .accentColor
             )
             .scaleEffect(0.55)
             .frame(width: 60, height: 44)

@@ -90,7 +90,7 @@ struct ApprovalRowCard: View {
     }
 
     private var kidColor: Color {
-        Color(hex: (item.kid?.color ?? "#6C757D").trimmingCharacters(in: .init(charactersIn: "#")))
+        Color(hex: (item.kid?.color ?? "#6C757D").trimmingCharacters(in: .init(charactersIn: "#"))) ?? .gray
     }
 
     var body: some View {

@@ -317,8 +317,8 @@ struct QuestsView: View {
     private var questRingColor: Color {
         switch tier {
         case .starter: .yellow
-        case .standard: Color(hex: "4D96FF")
-        case .advanced: Color(hex: "B983FF")
+        case .standard: Color(hex: "4D96FF") ?? .blue
+        case .advanced: Color(hex: "B983FF") ?? .purple
         }
     }
 
@@ -331,25 +331,25 @@ struct QuestsView: View {
                 endPoint: .bottomTrailing
             ))
         case .standard:
-            return AnyShapeStyle(Color(hex: "4D96FF").opacity(0.07))
+            return AnyShapeStyle((Color(hex: "4D96FF") ?? .blue).opacity(0.07))
         case .advanced:
-            return AnyShapeStyle(Color(hex: "B983FF").opacity(0.06))
+            return AnyShapeStyle((Color(hex: "B983FF") ?? .purple).opacity(0.06))
         }
     }
 
     private var questHeroBorder: Color {
         switch tier {
         case .starter: .yellow.opacity(0.5)
-        case .standard: Color(hex: "4D96FF").opacity(0.3)
-        case .advanced: Color(hex: "B983FF").opacity(0.3)
+        case .standard: (Color(hex: "4D96FF") ?? .blue).opacity(0.3)
+        case .advanced: (Color(hex: "B983FF") ?? .purple).opacity(0.3)
         }
     }
 
     private var questShadowColor: Color {
         switch tier {
         case .starter: .yellow
-        case .standard: Color(hex: "4D96FF")
-        case .advanced: Color(hex: "B983FF")
+        case .standard: Color(hex: "4D96FF") ?? .blue
+        case .advanced: Color(hex: "B983FF") ?? .purple
         }
     }
 
