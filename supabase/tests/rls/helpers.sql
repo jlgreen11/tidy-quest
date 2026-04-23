@@ -191,6 +191,14 @@ BEGIN
 END;
 $$;
 
--- Grant usage on the tests schema to postgres (used by psql runner)
-CREATE SCHEMA IF NOT EXISTS tests;
-GRANT USAGE ON SCHEMA tests TO postgres;
+-- Grant usage on the tests schema to every role that may call these helpers
+-- during a test. After set_as_parent / set_as_child, the session role switches
+-- to 'authenticated', and after set_as_anon it switches to 'anon'. Both need
+-- USAGE on the schema plus EXECUTE on each function; otherwise subsequent
+-- tests.end_test() / tests.expect_rows() calls fail with
+--   ERROR: permission denied for schema tests
+GRANT USAGE ON SCHEMA tests TO postgres, authenticated, anon, service_role;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA tests
+  TO postgres, authenticated, anon, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA tests
+  GRANT EXECUTE ON FUNCTIONS TO postgres, authenticated, anon, service_role;
